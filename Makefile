@@ -15,6 +15,7 @@ CFLAGS 			= -Wextra -Wall -Werror
 CFLAGS 			+= -Iinclude -Isrc -O3 -Wunreachable-code -Ofast
 # CFLAGS 			+= -DDEBUG=1
 
+# define the path to my libft and mlx libraries
 LIBMLX			:= ./lib/MLX42
 LIBFTDIR 		= ./lib/libft
 
@@ -24,8 +25,8 @@ LIBS 			+= $(LIBFTDIR)/libft.a
 OBJ_DIR			= 	obj/
 SRC_DIR			= 	src/
 
-HEADERS			:= -I ./include -I $(LIBMLX)/include
-HEADERS			+= -I ./include -I $(LIBFTDIR)
+INCLUDE			:= -I ./include -I $(LIBMLX)/include
+INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
 SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
@@ -34,7 +35,6 @@ HDRS 			= $(addprefix include/, utils.h )
 
 libft = $(LIBFTDIR)/libft.a
 
-LIBFT_LIB = -Llibft -lft
 
 all: libmlx libft $(NAME)
 
@@ -42,7 +42,7 @@ all: libmlx libft $(NAME)
 # with includes for the libft that will allow the <libft.h> notation 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(HEADERS)  -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE)  -c $< -o $@
 
 
 build:
@@ -58,11 +58,11 @@ libft:
 	@$(MAKE) -C $(LIBFTDIR) all
 
 $(NAME): $(OBJS) $(HDRS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCLUDE) -o $(NAME)
 
 
 # %.o: %.c
-# 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
+# 	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) && printf "Compiling: $(notdir $<)"
 
 clean:
 	rm -f $(OBJECTS) *~
