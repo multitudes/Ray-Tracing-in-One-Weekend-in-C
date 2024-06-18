@@ -8,29 +8,42 @@
 # $< is another special variable, representing the first prerequisite (dependency) of the rule. It is the source file.
 
 NAME = miniRT
+
 CC = cc
-CCFLAGS = -Wextra -Wall -Werror
-CFLAGS += -Iinclude -Isrc -O3 -Wunreachable-code -Ofast
-CFLAGS += -DDEBUG=1
 
-LIBMLX	:= ./lib/MLX42
-LIBFTDIR = ./lib/libft
+CFLAGS 			= -Wextra -Wall -Werror
+CFLAGS 			+= -Iinclude -Isrc -O3 -Wunreachable-code -Ofast
+# CFLAGS 			+= -DDEBUG=1
 
-LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
-LIBS += $(LIBFTDIR)/libft.a
+LIBMLX			:= ./lib/MLX42
+LIBFTDIR 		= ./lib/libft
 
-HEADERS	:= -I ./include -I $(LIBMLX)/include
-HEADERS	+= -I ./include -I $(LIBFTDIR)
+LIBS			:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
+LIBS 			+= $(LIBFTDIR)/libft.a
 
-SRCS = $(addprefix src/, main.c)
+OBJ_DIR			= 	obj/
+SRC_DIR			= 	src/
 
-OBJS = $(SRCS:%.c=%.o)
+HEADERS			:= -I ./include -I $(LIBMLX)/include
+HEADERS			+= -I ./include -I $(LIBFTDIR)
+
+SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c) 
+OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
+HDRS 			= $(addprefix include/, utils.h )
+
 
 libft = $(LIBFTDIR)/libft.a
 
 LIBFT_LIB = -Llibft -lft
 
 all: libmlx libft $(NAME)
+
+# Static pattern rule for compilation - adding the .o files in the obj folder 
+# with includes for the libft that will allow the <libft.h> notation 
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(HEADERS)  -c $< -o $@
+
 
 build:
 	@mkdir -p build
@@ -44,11 +57,12 @@ libmlx:
 libft:
 	@$(MAKE) -C $(LIBFTDIR) all
 
-$(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+$(NAME): $(OBJS) $(HDRS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
+
+# %.o: %.c
+# 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)"
 
 clean:
 	rm -f $(OBJECTS) *~
