@@ -28,9 +28,9 @@ SRC_DIR			= 	src/
 INCLUDE			:= -I ./include -I $(LIBMLX)/include
 INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c) 
+SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vector.c ) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, utils.h )
+HDRS 			= $(addprefix include/, utils.h vector.h)
 
 
 libft = $(LIBFTDIR)/libft.a
