@@ -16,21 +16,21 @@ CFLAGS 			+= -Iinclude -Isrc -O3 -Wunreachable-code -Ofast
 # CFLAGS 			+= -DDEBUG=1
 
 # define the path to my libft and mlx libraries
-LIBMLX			:= ./lib/MLX42
+LIBMLX			= ./lib/MLX42
 LIBFTDIR 		= ./lib/libft
 
 LIBS			:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 LIBS 			+= $(LIBFTDIR)/libft.a
 
-OBJ_DIR			= 	obj/
-SRC_DIR			= 	src/
+OBJ_DIR			= obj/
+SRC_DIR			= src/
 
-INCLUDE			:= -I ./include -I $(LIBMLX)/include
+INCLUDE			= -I ./include -I $(LIBMLX)/include
 INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vector.c ) 
+SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vector.c color.c) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, utils.h vector.h)
+HDRS 			= $(addprefix include/, utils.h vector.h color.h)
 
 
 libft = $(LIBFTDIR)/libft.a
@@ -59,7 +59,6 @@ libft:
 
 $(NAME): $(OBJS) $(HDRS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCLUDE) -o $(NAME)
-
 
 # %.o: %.c
 # 	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) && printf "Compiling: $(notdir $<)"

@@ -14,8 +14,6 @@
 #ifndef VECTOR_H
 # define VECTOR_H
 
-
-
 typedef struct 	s_vec3
 {
 	double p[3];
@@ -38,7 +36,6 @@ t_vec3	vec3divide(t_vec3 *a, double t);
   
 double	length3_squared(t_vec3 *v);
 double	length3(t_vec3 *v);
-
 
 // Vector Utility Functions
 

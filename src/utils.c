@@ -6,13 +6,15 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:24:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/18 11:50:03 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/18 15:07:04 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 #include <limits.h>
 #include <stdio.h>
+#include "color.h"
+
 /*
 PPM format. as in wiki:
 P3 means the colors are in ascii, and the first two numbers are 
@@ -24,28 +26,27 @@ we print them out.
 */
 void create_ppm_image(char *filename, int width, int height)
 {
+	FILE *file;
+	char filepath[PATH_MAX];
 	int image_width = width;
 	int image_height = height;
 
 	// render
-	char filepath[PATH_MAX];
 	sprintf(filepath, "assets/%s", filename);
-	FILE *file = fopen(filepath, "w");
+
+	file = fopen(filepath, "w");
 	fprintf(file, "P3\n%d %d\n255\n", image_width, image_height);
 
 	for (int j = 0; j < image_height; j++) 
 	{
+		// write to std err
+		fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
 		for (int i = 0; i < image_width; i++)
 		{
-			float r = (float)i / (image_width - 1);
-			float g = (float)j / (image_height - 1);
-			float b = 0.0;
-
-			int ir = (int)(255.999 * r);
-			int ig = (int)(255.999 * g);
-			int ib = (int)(255.999 * b);
-
-			fprintf(file, "%d %d %d\n", ir, ig, ib);
+			t_color pixel_color;
+			
+			init_vec3(&pixel_color, (float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
+			write_color(file, &pixel_color);
 		}
 	}
 }
