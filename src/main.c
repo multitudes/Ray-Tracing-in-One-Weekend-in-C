@@ -34,7 +34,17 @@ void ray_color(t_color *color, t_ray *r)
 	init_vec3(color, 0, 0, 0);
 }
 
+typedef struct {
+    double x;
+    double y;
+} Vec2;
 
+Vec2 vec2_add(Vec2 a, Vec2 b) {
+    Vec2 result;
+    result.x = a.x + b.x;
+    result.y = a.y + b.y;
+    return result;
+}
 
 int main(int argc, char **argv)
 {
@@ -84,6 +94,15 @@ int main(int argc, char **argv)
 	vec3add(&pixel00_loc, &viewport_upper_left, &pixel_delta);
 
 
+
+
+	Vec2 a = {1.0, 2.0};
+	Vec2 b = {3.0, 4.0};
+	Vec2 c = vec2_add(a, b); // c is now {4.0, 6.0}
+	printf("c is %f %f\n", c.x, c.y);
+
+
+
 	params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
 	params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
 
@@ -96,4 +115,7 @@ int main(int argc, char **argv)
 	mlx_loop_hook(params.mlx, draw, &params);
 
 	mlx_loop(params.mlx);
+
+
+
 }
