@@ -19,7 +19,7 @@ typedef struct 	s_vec3
 	double p[3];
 }				t_vec3, t_color, t_point3;
 
-void	init_vec3(t_vec3 *v, double x, double y, double z);
+t_vec3	init_vec3(double x, double y, double z);
 
 
 double	vec3x(t_vec3 *v);
@@ -27,12 +27,12 @@ double 	vec3y(t_vec3 *v);
 double 	vec3z(t_vec3 *v);
 
 
-void	vec3negate(t_vec3 *result, t_vec3 *a);
-void	vec3add(t_vec3 *result, t_vec3 *a, t_vec3 *b);
-void	vec3substr(t_vec3 *result, t_vec3 *a, t_vec3 *b);
-void	vec3mult(t_vec3 *result, t_vec3 *a, t_vec3 *b);
-void	vec3multscalar(t_vec3 *result, t_vec3 *a, double t);
-void	vec3divide(t_vec3 *result, t_vec3 *a, double t);
+t_vec3	vec3negate(t_vec3 *a);
+t_vec3	vec3add(t_vec3 *a, t_vec3 *b);
+t_vec3	vec3substr(t_vec3 *a, t_vec3 *b);
+t_vec3	vec3mult(t_vec3 *a, t_vec3 *b);
+t_vec3	vec3multscalar(t_vec3 *a, double t);
+t_vec3	vec3divide(t_vec3 *a, double t);
   
 double	length3_squared(t_vec3 *v);
 double	length3(t_vec3 *v);
@@ -41,8 +41,8 @@ double	length3(t_vec3 *v);
 
 void	print_vec3(t_vec3 *v);
 
-double	vec3dot(t_vec3 *a, t_vec3 *b);
-void	vec3cross(t_vec3 *result, t_vec3 *a, t_vec3 *b);
-void	vec3unit(t_vec3 *result, t_vec3 *v);
+t_vec3	vec3dot(t_vec3 *a, t_vec3 *b);
+t_vec3	vec3cross(t_vec3 *a, t_vec3 *b);
+void	vec3unit(t_vec3 *v);
 
 #endif
