@@ -30,7 +30,7 @@ INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
 SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vector.c color.c) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, utils.h vector.h color.h)
+HDRS 			= $(addprefix include/, utils.h vec3.h color.h)
 
 
 libft = $(LIBFTDIR)/libft.a
