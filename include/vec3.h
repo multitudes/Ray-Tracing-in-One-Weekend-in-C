@@ -43,6 +43,6 @@ void	print_vec3(const t_vec3 *v);
 
 t_vec3	vec3dot(const t_vec3 *a, const t_vec3 *b);
 t_vec3	vec3cross(const t_vec3 *a, const t_vec3 *b);
-void	vec3unit(t_vec3 *v);
+void	unit_vector(t_vec3 *v);
 
 #endif

@@ -32,10 +32,15 @@ void draw(void *param)
 
 t_color ray_color(t_ray *r)
 {
-	(void)r;
-	t_color color;
-
-	color = vec3(0, 0, 0);
+	t_vec3 dir = r->dir;
+	unit_vector(&dir);
+	double a = 0.5 * (dir.p[1] + 1.0);
+	t_color white = vec3(1.0, 1.0, 1.0);
+	t_color blue = vec3(0.5, 0.7, 1.0);
+	t_color white_scaled = vec3multscalar(&white, 1.0 - a);
+	t_color blue_scaled = vec3multscalar(&blue, a);
+	t_color color = vec3add(&white_scaled, &blue_scaled);
+	print_vec3(&color);
 	return color;
 }
 
@@ -48,17 +53,19 @@ int main(int argc, char **argv)
 
 
  	// aspect_ratio is an ideal ratio
-	params.aspect_ratio = 16 / 9;
-	int image_width = 400;
+	params.aspect_ratio = (double)16 / 9;
+	printf("aspect_ratio: %f\n", params.aspect_ratio);
+	int image_width = 800;
 	// calculate image height and ansure that it is at least 1
-	int image_height = (int)(image_width / params.aspect_ratio);
+	int image_height = image_width / params.aspect_ratio;
+	printf("image_height: %d\n", image_height);
 	image_height = (image_height < 1) ? 1 : image_height;
 	
 	// viewport
 	double viewport_height = 2.0;
 	// image is truncated... not rounded up therefore I recalculate the viewport width here
 	double viewport_width = viewport_height * ((double)image_width/image_height);
-	
+	printf("viewport_width: %f\n", viewport_width);
 	// camera
 	// camera center. a point in 3D space from which all scene rays will originate
 	const t_vec3 camera_center = vec3(0, 0, 0);
@@ -100,11 +107,11 @@ int main(int argc, char **argv)
 	for (int j = 0; j < image_height; j++) 
 	{
 		// write to std err
-		fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
+		// fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
 		for (int i = 0; i < image_width; i++)
 		{	
-			t_point3 j_multiply = vec3multscalar(&pixel_delta_v, (double)j);
 			t_point3 i_multiply = vec3multscalar(&pixel_delta_u, (double)i);
+			t_point3 j_multiply = vec3multscalar(&pixel_delta_v, (double)j);
 			t_point3 deltas = vec3add(&i_multiply, &j_multiply);
 			const t_point3 pixel_center = vec3add(&pixel00_loc, &deltas);
 			t_ray r = ray(&camera_center, &pixel_center);
@@ -115,18 +122,18 @@ int main(int argc, char **argv)
 		}
 	}
 
-	params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
-	params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
+	// params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
+	// params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
 
-	if (mlx_image_to_window(params.mlx, params.img, 30, 30) == -1)
-	{
-		write(2, "mlx_image_to_window failed\n", 27);
-		return (1);
-	}
+	// if (mlx_image_to_window(params.mlx, params.img, 30, 30) == -1)
+	// {
+	// 	write(2, "mlx_image_to_window failed\n", 27);
+	// 	return (1);
+	// }
 
-	mlx_loop_hook(params.mlx, draw, &params);
+	// mlx_loop_hook(params.mlx, draw, &params);
 
-	mlx_loop(params.mlx);
+	// mlx_loop(params.mlx);
 
 
 
