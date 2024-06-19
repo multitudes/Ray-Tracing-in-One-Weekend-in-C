@@ -19,7 +19,7 @@ typedef struct 	s_vec3
 	double p[3];
 }				t_vec3, t_color, t_point3;
 
-t_vec3	init_vec3(double x, double y, double z);
+t_vec3	vec3(double x, double y, double z);
 
 
 double	vec3x(t_vec3 *v);

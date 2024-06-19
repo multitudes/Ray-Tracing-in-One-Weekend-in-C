@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:24:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/19 13:02:43 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/19 13:45:22 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void create_ppm_image(char *filename, int width, int height)
 		fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
 		for (int i = 0; i < image_width; i++)
 		{
-			t_color pixel_color = init_vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
+			t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
 			write_color(file, &pixel_color);
 		}
 	}

@@ -28,30 +28,14 @@ void draw(void *param)
 	(void)params;
 }
 
-void ray_color(t_color *color, t_ray *r)
+t_color ray_color(t_ray *r)
 {
 	(void)r;
-	(void)color;
-	// init_vec3(color, 0, 0, 0);
+	t_color color;
+
+	color = vec3(0, 0, 0);
+	return color;
 }
-
-/*
-just a check. I was not sure if it is a good idea to create a struct in a func
-and return it by value. like an int or a double. But it seems to work. funny
-being useed to strings in C where it is not possible. so as long as I dont pass the pointer 
-but the whole thing it is going to work. it is passed by value.
-*/
-// typedef struct {
-//     double x;
-//     double y;
-// } Vec2;
-
-// Vec2 vec2_add(Vec2 a, Vec2 b) {
-//     Vec2 result;
-//     result.x = a.x + b.x;
-//     result.y = a.y + b.y;
-//     return result;
-// }
 
 int main(int argc, char **argv)
 {
@@ -64,17 +48,40 @@ int main(int argc, char **argv)
 	// for the book course we create a ppm image
 	create_ppm_image("test.ppm", WIDTH, HEIGHT);
 
-	// params.aspect_ratio = 16 / 9;
+ 	// aspect_ratio is an ideal ratio
+	params.aspect_ratio = 16 / 9;
+	int image_width = 400;
+	// calculate image height and ansure that it is at least 1
+	int image_height = (int)(image_width / params.aspect_ratio);
+	image_height = (image_height < 1) ? 1 : image_height;
 	
-	// // viewport
-	// int image_width = 400;
-	// int image_height = (int)(image_width / params.aspect_ratio);
-	// image_height = (image_height < 1) ? 1 : image_height;
-	// double viewport_height = 2.0;
-	// double viewport_width = viewport_height * ((double)image_width/image_height);
-	// double focal_length = 1.0;
-	// t_vec3 camera_center;
+	// viewport
+	double viewport_height = 2.0;
+	// image is truncated... not rounded up therefore I recalculate the viewport width here
+	double viewport_width = viewport_height * ((double)image_width/image_height);
+	
+	// camera
+	// camera center. a point in 3D space from which all scene rays will originate
+	t_vec3 camera_center = vec3(0, 0, 0);
+	// focal length. distance from the camera to the viewport
+	double focal_length = 1.0;
 
+	// 3d space conflicts with 2d image coordinates which start at the top left corner
+	// Calculate the vectors across the horizontal and down the vertical viewport edges.
+    t_vec3 viewport_u = vec3(viewport_width, 0.0, 0.0);
+    t_vec3 viewport_v = vec3(0, -viewport_height, 0);
+
+    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
+    t_vec3 pixel_delta_u = vec3divide(&viewport_u, image_width);
+	t_vec3 pixel_delta_v = vec3divide(&viewport_v, image_height);
+
+    // Calculate the location of the upper left pixel.
+	t_vec3 translation = vec3(-viewport_width / 2, -viewport_height / 2, -focal_length);
+    t_point3 viewport_upper_left = vec3add(&camera_center, &translation);
+	t_vec3 small_translation = vec3(0.5 * viewport_width / image_width, \
+									0.5 * viewport_height / image_height, \
+									0.0);
+    t_point3 pixel00_loc = vec3add(&viewport_upper_left, &small_translation);
 
 
 
@@ -94,3 +101,22 @@ int main(int argc, char **argv)
 
 
 }
+
+
+/*
+just a check. I was not sure if it is a good idea to create a struct in a func
+and return it by value. like an int or a double. But it seems to work. funny
+being useed to strings in C where it is not possible. so as long as I dont pass the pointer 
+but the whole thing it is going to work. it is passed by value.
+*/
+// typedef struct {
+//     double x;
+//     double y;
+// } Vec2;
+
+// Vec2 vec2_add(Vec2 a, Vec2 b) {
+//     Vec2 result;
+//     result.x = a.x + b.x;
+//     result.y = a.y + b.y;
+//     return result;
+// }
