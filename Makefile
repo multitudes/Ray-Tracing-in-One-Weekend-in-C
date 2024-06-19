@@ -28,7 +28,7 @@ SRC_DIR			= src/
 INCLUDE			= -I ./include -I $(LIBMLX)/include
 INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c) 
+SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c ray.c ) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 HDRS 			= $(addprefix include/, utils.h vec3.h color.h)
 

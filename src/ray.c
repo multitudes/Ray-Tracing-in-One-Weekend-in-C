@@ -6,13 +6,13 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:46:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/19 13:25:46 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/19 14:59:31 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ray.h"
 
-t_ray	init_ray(t_point3 *origin, t_vec3 *direction)
+t_ray	ray(const t_point3 *origin, const t_vec3 *direction)
 {
 	t_ray ray;
 

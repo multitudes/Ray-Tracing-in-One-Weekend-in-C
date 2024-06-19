@@ -24,21 +24,21 @@ t_vec3	vec3(double x, double y, double z)
 }
 
 // do I need these getters? we are not in cpp here :)
-double	vec3x(t_vec3 *v)
+double	vec3x(const t_vec3 *v)
 {
 	return (v->p[0]);
 }
-double 	vec3y(t_vec3 *v)
+double 	vec3y(const t_vec3 *v)
 {
 	return (v->p[1]);
 }
-double 	vec3z(t_vec3 *v)
+double 	vec3z(const t_vec3 *v)
 {
 	return (v->p[2]);
 }
 
 
-t_vec3	vec3negate(t_vec3 *a)
+t_vec3	vec3negate(const t_vec3 *a)
 {
 	t_vec3 result;
 	result.p[0] = -a->p[0];
@@ -47,7 +47,7 @@ t_vec3	vec3negate(t_vec3 *a)
 	return result;
 }
 
-t_vec3	vec3add(t_vec3 *a, t_vec3 *b)
+t_vec3	vec3add(const t_vec3 *a, const t_vec3 *b)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] + b->p[0];
@@ -56,7 +56,7 @@ t_vec3	vec3add(t_vec3 *a, t_vec3 *b)
 	return result;
 }
 
-t_vec3	vec3substr(t_vec3 *a, t_vec3 *b)
+t_vec3	vec3substr(const t_vec3 *a, const t_vec3 *b)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] - b->p[0];
@@ -65,7 +65,7 @@ t_vec3	vec3substr(t_vec3 *a, t_vec3 *b)
 	return result;
 }
 
-t_vec3	vec3mult(t_vec3 *a, t_vec3 *b)
+t_vec3	vec3mult(const t_vec3 *a, const t_vec3 *b)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] * b->p[0];
@@ -74,7 +74,7 @@ t_vec3	vec3mult(t_vec3 *a, t_vec3 *b)
 	return result;
 
 }
-t_vec3	vec3multscalar(t_vec3 *a, double t)
+t_vec3	vec3multscalar(const t_vec3 *a, double t)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] * t;
@@ -83,7 +83,7 @@ t_vec3	vec3multscalar(t_vec3 *a, double t)
 	return result;
 }
 
-t_vec3	vec3divide(t_vec3 *a, double t)
+t_vec3	vec3divide(const t_vec3 *a, double t)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] / t;
@@ -93,24 +93,24 @@ t_vec3	vec3divide(t_vec3 *a, double t)
 }
 
   
-double	length3_squared(t_vec3 *v)
+double	length3_squared(const t_vec3 *v)
 {
 	return (v->p[0] * v->p[0] + v->p[1] * v->p[1] + v->p[2] * v->p[2]);
 }
 
-double	length3(t_vec3 *v)
+double	length3(const t_vec3 *v)
 {
 	return (sqrt(length3_squared(v)));
 }
 
 // Vector Utility Functions
 
-void	print_vec3(t_vec3 *v)
+void	print_vec3(const t_vec3 *v)
 {
 	printf("%f %f %f\n", v->p[0], v->p[1], v->p[2]);
 }
 
-t_vec3	vec3dot(t_vec3 *a, t_vec3 *b)
+t_vec3	vec3dot(const t_vec3 *a, const t_vec3 *b)
 {
 	t_vec3 result;
 	result.p[0] = a->p[0] * b->p[0];
@@ -122,7 +122,7 @@ t_vec3	vec3dot(t_vec3 *a, t_vec3 *b)
 /*
 returns the cross product of a and b by value
 */
-t_vec3	vec3cross(t_vec3 *a, t_vec3 *b)
+t_vec3	vec3cross(const t_vec3 *a, const t_vec3 *b)
 {
 	t_vec3 result;
 	result.p[0] = a->p[1] * b->p[2] - a->p[2] * b->p[1];

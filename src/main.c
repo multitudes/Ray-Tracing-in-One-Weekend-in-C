@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <MLX42/MLX42.h>
 #include <unistd.h>
+#include <limits.h>
+#include <string.h>
 
 #include "utils.h"
 #include "vec3.h"
@@ -43,10 +45,7 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
-    printf("hello world!\n");
-	
-	// for the book course we create a ppm image
-	create_ppm_image("test.ppm", WIDTH, HEIGHT);
+
 
  	// aspect_ratio is an ideal ratio
 	params.aspect_ratio = 16 / 9;
@@ -62,7 +61,7 @@ int main(int argc, char **argv)
 	
 	// camera
 	// camera center. a point in 3D space from which all scene rays will originate
-	t_vec3 camera_center = vec3(0, 0, 0);
+	const t_vec3 camera_center = vec3(0, 0, 0);
 	// focal length. distance from the camera to the viewport
 	double focal_length = 1.0;
 
@@ -84,6 +83,37 @@ int main(int argc, char **argv)
     t_point3 pixel00_loc = vec3add(&viewport_upper_left, &small_translation);
 
 
+    printf("hello world!\n");
+	
+	// for the book course we create a ppm image
+	// create_ppm_image("test.ppm", WIDTH, HEIGHT);
+
+	FILE *file;
+	char filepath[PATH_MAX];
+
+	// render
+	sprintf(filepath, "assets/%s", "test2.ppm");
+
+	file = fopen(filepath, "w");
+	fprintf(file, "P3\n%d %d\n255\n", image_width, image_height);
+
+	for (int j = 0; j < image_height; j++) 
+	{
+		// write to std err
+		fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
+		for (int i = 0; i < image_width; i++)
+		{	
+			t_point3 j_multiply = vec3multscalar(&pixel_delta_v, (double)j);
+			t_point3 i_multiply = vec3multscalar(&pixel_delta_u, (double)i);
+			t_point3 deltas = vec3add(&i_multiply, &j_multiply);
+			const t_point3 pixel_center = vec3add(&pixel00_loc, &deltas);
+			t_ray r = ray(&camera_center, &pixel_center);
+			t_color pixel_color = ray_color(&r);
+
+			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
+			write_color(file, &pixel_color);
+		}
+	}
 
 	params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
 	params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
