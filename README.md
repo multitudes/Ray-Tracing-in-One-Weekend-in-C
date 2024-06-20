@@ -1,3 +1,5 @@
+
+
 # miniRT
 This project is an introduction to the beautiful world of Raytracing.
 
@@ -69,6 +71,29 @@ The viewport is a virtual rectangle in the 3D world that contains the grid of im
 We'll initially set the distance between the viewport and the camera center point to be one unit. This distance is often referred to as the focal length.  
 While our 3D space has the conventions above, this conflicts with our image coordinates, where we want to have the zeroth pixel in the top-left and work our way down to the last pixel at the bottom right. This means that our image coordinate Y-axis is inverted: Y increases going down the image. 
  We'll also have the y-axis go up, the x-axis to the right, and the negative z-axis pointing in the viewing direction. (This is commonly referred to as right-handed coordinates.)
+
+## Ray-Sphere Intersection
+
+The equation for a sphere of radius r that is centered at the origin is an important mathematical equation: 
+
+$$
+x^2 + y^2 + z^2 = r^2
+$$
+
+If a given point (x,y,z) is inside the sphere, then $x^2 + y^2 + z^2 < r^2$ , and if a given point (x,y,z) is outside the sphere, then $x^2 + y^2 + z^2 > r^2$.
+
+If we want to allow the sphere center to be at an arbitrary point (Cx,Cy,Cz) in 3D, then the equation becomes:  
+$$
+(Cx−x)^2 + (Cy−y)^2 + (Cz−z)^2 = r^2
+$$
+
+This formula looks very similar to the definition of a dot product of a vector from point P = (x,y,z) to a center C = (Cx,Cy,Cz) which is (C-P).
+
+The dot product of this vector with itself is:  
+
+$$
+(C−P)⋅(C−P)=(Cx−x)^2+(Cy−y)^2+(Cz−z)^2 = r ^ 2
+$$ 
 
 
 

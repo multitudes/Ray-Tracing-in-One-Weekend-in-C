@@ -9,6 +9,7 @@
 #include "vec3.h"
 #include "color.h"
 #include "ray.h"
+#include "sphere.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -32,20 +33,6 @@ void	draw(void *param)
 	// todo: update image
 }
 
-typedef struct	s_sphere
-{
-	t_point3	center;
-	double		radius;
-}				t_sphere;
-
-t_sphere sphere(t_point3 center, double radius)
-{
-	t_sphere s;
-
-	s.center = center;
-	s.radius = radius;
-	return s;
-}
 
 bool hit_sphere(const t_sphere *s, const t_ray *r) 
 {
