@@ -32,20 +32,54 @@ void	draw(void *param)
 	// todo: update image
 }
 
+typedef struct	s_sphere
+{
+	t_point3	center;
+	double		radius;
+}				t_sphere;
+
+t_sphere sphere(t_point3 center, double radius)
+{
+	t_sphere s;
+
+	s.center = center;
+	s.radius = radius;
+	return s;
+}
+
+bool hit_sphere(const t_sphere *s, const t_ray *r) 
+{
+    t_vec3 oc = vec3substr(&(s->center), &(r->orig));
+    double a = dot(&(r->dir), &(r->dir));
+    double b = -2.0 * dot(&(r->dir), &oc);
+    double c = dot(&oc, &oc) - s->radius * s->radius;
+    double discriminant = b*b - 4*a*c;
+    return (discriminant >= 0);
+}
+
+
 t_color	ray_color(t_ray *r)
 {
 	t_vec3	dir;
+	t_color raycolor;
 	
 	dir = r->dir;
+	const t_sphere s = sphere(point3(0, 0, -1), 0.5);
+	if (hit_sphere(&s, r))
+	{
+		raycolor = color(1, 0, 0);
+        return raycolor;
+	}
 	unit_vector(&dir);
 	double a = 0.5 * (dir.p[1] + 1.0);
+	// printf("a: %f\n", a);
 	t_color white = vec3(1.0, 1.0, 1.0);
 	t_color blue = vec3(0.5, 0.7, 1.0);
 	t_color white_scaled = vec3multscalar(&white, 1.0 - a);
 	t_color blue_scaled = vec3multscalar(&blue, a);
-	t_color color = vec3add(&white_scaled, &blue_scaled);
-	print_vec3(&color);
-	return color;
+	raycolor = vec3add(&white_scaled, &blue_scaled);
+	// print_vec3(&color);
+	return raycolor;
 }
 
 int main(int argc, char **argv)
@@ -78,12 +112,12 @@ int main(int argc, char **argv)
 
 	// 3d space conflicts with 2d image coordinates which start at the top left corner
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
-    t_vec3 viewport_u = vec3(viewport_width, 0.0, 0.0);
-    t_vec3 viewport_v = vec3(0, -viewport_height, 0);
+    // t_vec3 viewport_u = vec3(viewport_width, 0.0, 0.0);
+    // t_vec3 viewport_v = vec3(0, -viewport_height, 0);
 
     // Calculate the horizontal and vertical delta vectors from pixel to pixel.
-    t_vec3 pixel_delta_u = vec3divide(&viewport_u, image_width);
-	t_vec3 pixel_delta_v = vec3divide(&viewport_v, image_height);
+    // t_vec3 pixel_delta_u = vec3divide(&viewport_u, image_width);
+	// t_vec3 pixel_delta_v = vec3divide(&viewport_v, image_height);
 
     // Calculate the location of the upper left pixel. viewport_height needs to be negated again so positive values are up.
 	t_vec3 translation = vec3(-viewport_width / 2, viewport_height / 2, -focal_length);
@@ -110,7 +144,6 @@ int main(int argc, char **argv)
 
 	// render
 	sprintf(filepath, "assets/%s", "test2.ppm");
-
 	file = fopen(filepath, "w");
 	fprintf(file, "P3\n%d %d\n255\n", image_width, image_height);
 
@@ -120,13 +153,17 @@ int main(int argc, char **argv)
 		// fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
 		for (int i = 0; i < image_width; i++)
 		{	
-			t_point3 i_multiply = vec3multscalar(&pixel_delta_u, (double)i);
-			t_point3 j_multiply = vec3multscalar(&pixel_delta_v, (double)j);
-			t_point3 deltas = vec3add(&i_multiply, &j_multiply);
+			// t_point3 i_multiply = vec3multscalar(&pixel_delta_u, (double)i);
+			// t_point3 j_multiply = vec3multscalar(&pixel_delta_v, (double)j);
+			t_point3 deltas = vec3((double)viewport_width / image_width * i, -(double)viewport_height / image_height * j, 0.0);
+			
 			const t_point3 pixel_center = vec3add(&pixel00_loc, &deltas);
+
+// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
+// so the direction vector is the pixel center
 			t_ray r = ray(&camera_center, &pixel_center);
 			t_color pixel_color = ray_color(&r);
-
+			print_vec3(&pixel_color);
 			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
 			write_color(file, &pixel_color);
 		}

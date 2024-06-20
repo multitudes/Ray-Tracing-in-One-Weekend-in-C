@@ -27,6 +27,16 @@ t_vec3	vec3(double x, double y, double z)
 	return result;
 }
 
+t_point3	point3(double x, double y, double z)
+{
+	t_point3 result;
+
+	result.p[0] = x;
+	result.p[1] = y;
+	result.p[2] = z;
+	return result;
+}
+
 // do I need these getters? we are not in cpp here :)
 double	vec3x(const t_vec3 *v)
 {
@@ -125,7 +135,7 @@ void	print_vec3(const t_vec3 *v)
 /*
  * dot product of vectors a . b = a1*b1 + a2*b2 + a3*b3
  */
-double	vec3dot(const t_vec3 *a, const t_vec3 *b)
+double	dot(const t_vec3 *a, const t_vec3 *b)
 {
 	double result;
 

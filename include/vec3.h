@@ -19,8 +19,8 @@ typedef struct 	s_vec3
 	double p[3];
 }				t_vec3, t_color, t_point3;
 
-t_vec3	vec3(double x, double y, double z);
-
+t_vec3		vec3(double x, double y, double z);
+t_point3	point3(double x, double y, double z);
 
 double	vec3x(const t_vec3 *v);
 double 	vec3y(const t_vec3 *v);
@@ -41,7 +41,7 @@ double	length3(const t_vec3 *v);
 
 void	print_vec3(const t_vec3 *v);
 
-double	vec3dot(const t_vec3 *a, const t_vec3 *b);
+double	dot(const t_vec3 *a, const t_vec3 *b);
 t_vec3	vec3cross(const t_vec3 *a, const t_vec3 *b);
 void	unit_vector(t_vec3 *v);
 

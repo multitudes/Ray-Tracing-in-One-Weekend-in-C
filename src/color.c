@@ -6,13 +6,24 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:49:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/18 15:24:00 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/20 10:25:35 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "color.h"
 #include <stdio.h>
 #include <limits.h>
+
+
+t_color color(double r, double g, double b)
+{
+	t_color result;
+
+	result.p[0] = r;
+	result.p[1] = g;
+	result.p[2] = b;
+	return result;
+}
 
 /*
 write a pixel to a file
