@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include <limits.h>
 #include <string.h>
-
 #include "utils.h"
 #include "vec3.h"
 #include "color.h"
@@ -14,26 +13,30 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-typedef struct s_params
+typedef struct 	s_params
 {
-	void *mlx;
+	void 		*mlx;
 	mlx_image_t *img;
-	double aspect_ratio;
-} t_params;
+	double 		aspect_ratio;
+} 				t_params;
 
 /*
 to be passed to mlx_loop_hook to update the image
 */
-void draw(void *param)
+void	draw(void *param)
 {
-	t_params *params = (t_params *)param;
+	t_params	*params;
+
+	params = (t_params *)param;
 	(void)params;
 	// todo: update image
 }
 
-t_color ray_color(t_ray *r)
+t_color	ray_color(t_ray *r)
 {
-	t_vec3 dir = r->dir;
+	t_vec3	dir;
+	
+	dir = r->dir;
 	unit_vector(&dir);
 	double a = 0.5 * (dir.p[1] + 1.0);
 	t_color white = vec3(1.0, 1.0, 1.0);
@@ -56,9 +59,9 @@ int main(int argc, char **argv)
  	// aspect_ratio is an ideal ratio
 	params.aspect_ratio = (double)16 / 9;
 	printf("aspect_ratio: %f\n", params.aspect_ratio);
-	int image_width = 800;
+	int image_width = 400;
 	// calculate image height and ansure that it is at least 1
-	int image_height = image_width / params.aspect_ratio;
+	int image_height = (double)image_width / params.aspect_ratio;
 	printf("image_height: %d\n", image_height);
 	image_height = (image_height < 1) ? 1 : image_height;
 	
@@ -66,7 +69,7 @@ int main(int argc, char **argv)
 	double viewport_height = 2.0;
 	// image is truncated... not rounded up therefore I recalculate the viewport width here
 	double viewport_width = viewport_height * ((double)image_width/image_height);
-	printf("viewport_width: %f\n", viewport_width);
+	printf("viewport_width: %f and height %f\n", viewport_width, viewport_height);
 	// camera
 	// camera center. a point in 3D space from which all scene rays will originate
 	const t_vec3 camera_center = vec3(0, 0, 0);
@@ -82,14 +85,20 @@ int main(int argc, char **argv)
     t_vec3 pixel_delta_u = vec3divide(&viewport_u, image_width);
 	t_vec3 pixel_delta_v = vec3divide(&viewport_v, image_height);
 
-    // Calculate the location of the upper left pixel.
-	t_vec3 translation = vec3(-viewport_width / 2, -viewport_height / 2, -focal_length);
+    // Calculate the location of the upper left pixel. viewport_height needs to be negated again so positive values are up.
+	t_vec3 translation = vec3(-viewport_width / 2, viewport_height / 2, -focal_length);
     t_point3 viewport_upper_left = vec3add(&camera_center, &translation);
+	printf("viewport_upper_left: ");
+	print_vec3(&viewport_upper_left);
+	// get the offset to the first pixel center
 	t_vec3 small_translation = vec3(0.5 * viewport_width / image_width, \
-									0.5 * viewport_height / image_height, \
+									- 0.5 * viewport_height / image_height, \
 									0.0);
+	printf("small_translation: ");
+	print_vec3(&small_translation);
     t_point3 pixel00_loc = vec3add(&viewport_upper_left, &small_translation);
-
+	printf("pixel00_loc: ");
+	print_vec3(&pixel00_loc);
 
     printf("hello world!\n");
 	
