@@ -36,10 +36,10 @@ void	draw(void *param)
 
 bool hit_sphere(const t_sphere *s, const t_ray *r) 
 {
-    t_vec3 oc = vec3substr(&(s->center), &(r->orig));
+    t_vec3 cq = vec3substr(&(s->center), &(r->orig));
     double a = dot(&(r->dir), &(r->dir));
-    double b = -2.0 * dot(&(r->dir), &oc);
-    double c = dot(&oc, &oc) - s->radius * s->radius;
+    double b = -2.0 * dot(&(r->dir), &cq);
+    double c = dot(&cq, &cq) - s->radius * s->radius;
     double discriminant = b*b - 4*a*c;
     return (discriminant >= 0);
 }

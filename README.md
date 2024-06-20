@@ -95,6 +95,44 @@ $$
 (C−P)⋅(C−P)=(Cx−x)^2+(Cy−y)^2+(Cz−z)^2 = r ^ 2
 $$ 
 
+We can read this as “any point P that satisfies this equation is on the sphere”.  
+
+Remember that on our ray P is a function of t, so we can substitute P = Q + td into the equation and solve for t. (Q is the origin of the ray, and d is the direction of the ray.)
+
+The only unknown is t, and we have a $t^2$, which means that this equation is quadratic. 
+You can solve for a quadratic equation $ax^2+bx+c=0$ by using the quadratic formula:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+So solving for t in the ray-sphere intersection equation gives us these values for a, b, and c:
+$$
+a=d⋅d
+b=−2d⋅(C−Q)
+c=(C−Q)⋅(C−Q)−r2
+$$
+
+where Q is the origin of the ray, d is the direction of the ray, C is the center of the sphere, and r is the radius of the sphere.
+
+Really we just need to know if the square root also called the discriminant is real and positive. If it is, then the ray intersects the sphere at two points. If it is zero, then the ray is tangent to the sphere. If it is negative, then the ray misses the sphere entirely.
+
+$$
+\sqrt{b^2 - 4ac}
+$$
+
+In code:
+```c
+bool hit_sphere(const t_sphere *s, const t_ray *r) 
+{
+    t_vec3 cq = vec3substr(&(s->center), &(r->orig));
+    double a = dot(&(r->dir), &(r->dir));
+    double b = -2.0 * dot(&(r->dir), &cq);
+    double c = dot(&cq, &cq) - s->radius * s->radius;
+    double discriminant = b*b - 4*a*c;
+    return (discriminant >= 0);
+}
+```
 
 
 ## Extras - the compile_commands.json file
