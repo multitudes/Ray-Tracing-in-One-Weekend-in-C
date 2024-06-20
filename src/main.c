@@ -28,6 +28,7 @@ void draw(void *param)
 {
 	t_params *params = (t_params *)param;
 	(void)params;
+	// todo: update image
 }
 
 t_color ray_color(t_ray *r)

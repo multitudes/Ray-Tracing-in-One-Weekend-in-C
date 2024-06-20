@@ -41,7 +41,7 @@ double	length3(const t_vec3 *v);
 
 void	print_vec3(const t_vec3 *v);
 
-t_vec3	vec3dot(const t_vec3 *a, const t_vec3 *b);
+double	vec3dot(const t_vec3 *a, const t_vec3 *b);
 t_vec3	vec3cross(const t_vec3 *a, const t_vec3 *b);
 void	unit_vector(t_vec3 *v);
 

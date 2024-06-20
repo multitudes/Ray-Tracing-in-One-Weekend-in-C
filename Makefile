@@ -52,10 +52,10 @@ libmlx:
 	@if [ ! -d "lib/MLX42" ]; then \
 	git clone https://github.com/codam-coding-college/MLX42.git lib/MLX42; \
 	fi
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+	cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 
 libft:
-	@$(MAKE) -C $(LIBFTDIR) all
+	$(MAKE) -C $(LIBFTDIR) all
 
 $(NAME): $(OBJS) $(HDRS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCLUDE) -o $(NAME)
