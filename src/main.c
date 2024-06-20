@@ -33,39 +33,28 @@ void	draw(void *param)
 	// todo: update image
 }
 
-
-bool hit_sphere(const t_sphere *s, const t_ray *r) 
-{
-    t_vec3 cq = vec3substr(&(s->center), &(r->orig));
-    double a = dot(&(r->dir), &(r->dir));
-    double b = -2.0 * dot(&(r->dir), &cq);
-    double c = dot(&cq, &cq) - s->radius * s->radius;
-    double discriminant = b*b - 4*a*c;
-    return (discriminant >= 0);
-}
-
-
 t_color	ray_color(t_ray *r)
 {
-	t_vec3	dir;
-	t_color raycolor;
-	
+	t_vec3		dir;
+	t_color		raycolor;
+	t_sphere	s;
+	double		t;	
+
 	dir = r->dir;
-	const t_sphere s = sphere(point3(0, 0, -1), 0.5);
-	if (hit_sphere(&s, r))
+	unit_vector(&dir);
+	s = sphere(point3(0, 0, -1), 0.5);
+	t =	hit_sphere(&s, r);
+	if (t > 0.0)
 	{
-		raycolor = color(1, 0, 0);
+		t_vec3 p_intersection = point_at(r, t);
+		t_vec3 center = vec3(0, 0, -1);
+		t_vec3 n = vec3substr(&p_intersection, &center);
+		unit_vector(&n);
+
+		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
         return raycolor;
 	}
-	unit_vector(&dir);
-	double a = 0.5 * (dir.p[1] + 1.0);
-	// printf("a: %f\n", a);
-	t_color white = vec3(1.0, 1.0, 1.0);
-	t_color blue = vec3(0.5, 0.7, 1.0);
-	t_color white_scaled = vec3multscalar(&white, 1.0 - a);
-	t_color blue_scaled = vec3multscalar(&blue, a);
-	raycolor = vec3add(&white_scaled, &blue_scaled);
-	// print_vec3(&color);
+	raycolor = backgroundcolor(&dir);
 	return raycolor;
 }
 
@@ -74,8 +63,6 @@ int main(int argc, char **argv)
 	t_params params;
 	(void)argc;
 	(void)argv;
-
-
 
  	// aspect_ratio is an ideal ratio
 	params.aspect_ratio = (double)16 / 9;

@@ -37,20 +37,6 @@ t_point3	point3(double x, double y, double z)
 	return result;
 }
 
-// do I need these getters? we are not in cpp here :)
-double	vec3x(const t_vec3 *v)
-{
-	return (v->p[0]);
-}
-double 	vec3y(const t_vec3 *v)
-{
-	return (v->p[1]);
-}
-double 	vec3z(const t_vec3 *v)
-{
-	return (v->p[2]);
-}
-
 
 t_vec3	vec3negate(const t_vec3 *a)
 {
