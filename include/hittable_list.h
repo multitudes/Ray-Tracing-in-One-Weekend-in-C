@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 08:21:39 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/21 08:22:21 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/21 10:54:15 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@
 #include "hittable.h"
 
 
+typedef struct 	s_hittablelist {
+	t_hittable 	**list;
+	int 		size;
+} 				t_hittablelist; 
 
+bool hit(t_hittablelist *list, const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec);
 
 
 
