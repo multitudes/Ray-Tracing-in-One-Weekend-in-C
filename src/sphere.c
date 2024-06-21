@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/20 13:27:58 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/21 07:38:27 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "vec3.h"
+#include "hittable.h"
 
 /*
  * a sort of initializer for a sphere
@@ -36,17 +37,29 @@ t_sphere sphere(t_point3 center, double radius)
  * double c = dot(&oc, &oc) - s->radius * s->radius;
  * but this has been refactored using double h 
  */
-double hit_sphere(const t_sphere *s, const t_ray *r) 
+bool hit_sphere(const t_sphere *s, const t_ray *r, double ray_tmin, double ray_tmax, t_hit_record *rec) 
 {
     t_vec3 oc = vec3substr(&(s->center), &(r->orig));
-    double a = dot(&(r->dir), &(r->dir));
+    double a = length3_squared(&r->dir); 
     double h = dot(&(r->dir), &oc);
 	double c = length3_squared(&oc) - s->radius * s->radius;
     double discriminant = h*h - a*c;
-    // double c = dot(&oc, &oc) - s->radius * s->radius;
-    // double discriminant = b*b - 4*a*c;
+
 	if (discriminant < 0)
-		return (-1.0);
-	else
-		return ((h - sqrt(discriminant)) /  a);
+		return (false);
+	double sqrtd = sqrt(discriminant);
+	double root = (h - sqrtd) / a;
+	if (root <= ray_tmin || ray_tmax <= root) {
+	root = (h + sqrtd) / a;
+	if (root <= ray_tmin || ray_tmax <= root)
+		return false;
+    }
+	rec->t = root;
+	rec->p = point_at(r, rec->t);
+	t_vec3 inters_minus_center = vec3substr(&rec->p, &(s->center));
+	rec->normal = vec3divscalar(&inters_minus_center, s->radius);
+
+	return (true);
 }
+
+

@@ -40,14 +40,23 @@ t_color	ray_color(t_ray *r)
 	t_sphere	s;
 	double		t;	
 
+	t = 0;
 	dir = r->dir;
 	unit_vector(&dir);
 	s = sphere(point3(0, 0, -1), 0.5);
-	t =	hit_sphere(&s, r);
+	t_hit_record rec;
+	if (hit_sphere(&s, r, 0.1, 5.0, &rec))
+	{
+		const t_vec3 p_intersection = point_at(r, rec.t);
+		const t_vec3 inters_minus_center = vec3substr(&p_intersection, &s.center);
+		t_vec3 n = vec3divscalar(&inters_minus_center, s.radius);
+		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
+		return raycolor;
+	}
 	if (t > 0.0)
 	{
-		t_vec3 p_intersection = point_at(r, t);
-		t_vec3 center = vec3(0, 0, -1);
+		const t_vec3 p_intersection = point_at(r, t);
+		const t_vec3 center = vec3(0, 0, -1);
 		t_vec3 n = vec3substr(&p_intersection, &center);
 		unit_vector(&n);
 
@@ -133,11 +142,11 @@ int main(int argc, char **argv)
 			
 			const t_point3 pixel_center = vec3add(&pixel00_loc, &deltas);
 
-// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
-// so the direction vector is the pixel center
+			// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
+			// so the direction vector is the pixel center
 			t_ray r = ray(&camera_center, &pixel_center);
 			t_color pixel_color = ray_color(&r);
-			print_vec3(&pixel_color);
+			// print_vec3(&pixel_color);
 			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
 			write_color(file, &pixel_color);
 		}

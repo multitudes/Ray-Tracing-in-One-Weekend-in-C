@@ -89,7 +89,7 @@ t_vec3	vec3multscalar(const t_vec3 *a, double t)
 	return result;
 }
 
-t_vec3	vec3divide(const t_vec3 *a, double t)
+t_vec3	vec3divscalar(const t_vec3 *a, double t)
 {
 	t_vec3 result;
 
@@ -149,7 +149,9 @@ Modify in place
 */
 void unit_vector(t_vec3 *v)
 {
-    double length = length3(v);
+    double length;
+
+	length = length3(v);
     v->p[0] /= length;
     v->p[1] /= length;
     v->p[2] /= length;
