@@ -6,11 +6,12 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 10:49:28 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/21 10:55:09 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/21 10:56:06 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hittable.h"
+#include "hittable_list.h"
 #include "ray.h"
 #include <stdbool.h>
 

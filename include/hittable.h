@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 16:59:14 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/21 10:53:41 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/21 11:07:51 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct 	s_hit_record {
 
 /* translated from cpp - remains to see if I will incorporate this into every object*/
 typedef struct 	s_hittable{
-    bool 		(*hit)(const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec);
+    bool 		(*hit)(const void* self, const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec);
 } 				t_hittable;
 
 
