@@ -7,7 +7,7 @@
 # The -c flag indicates that the compiler should only produce an object file without linking. 
 # $< is another special variable, representing the first prerequisite (dependency) of the rule. It is the source file.
 
-NAME = miniRT
+NAME = inaweekend
 
 CC = cc
 
@@ -15,17 +15,15 @@ CFLAGS 			= -Wextra -Wall -Werror
 CFLAGS 			+= -Iinclude -Isrc -O3 -Wunreachable-code -Ofast
 # CFLAGS 			+= -DDEBUG=1
 
-# define the path to my libft and mlx libraries
-LIBMLX			= ./lib/MLX42
+# define the path to my libft 
 LIBFTDIR 		= ./lib/libft
 
-LIBS			:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
+LIBS			= -ldl -lglfw -pthread -lm
 LIBS 			+= $(LIBFTDIR)/libft.a
 
 OBJ_DIR			= obj/
 SRC_DIR			= src/
 
-INCLUDE			= -I ./include -I $(LIBMLX)/include
 INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
 SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c ray.c sphere.c) 
@@ -47,12 +45,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 
 build:
 	@mkdir -p build
-	
-libmlx:
-	@if [ ! -d "lib/MLX42" ]; then \
-	git clone https://github.com/codam-coding-college/MLX42.git lib/MLX42; \
-	fi
-	cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+
 
 libft:
 	$(MAKE) -C $(LIBFTDIR) all

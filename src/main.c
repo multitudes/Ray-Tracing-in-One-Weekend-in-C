@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
+/*   Updated: 2024/06/22 14:47:35 by lbrusa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <MLX42/MLX42.h>
 #include <unistd.h>
 #include <limits.h>
 #include <string.h>
@@ -10,29 +20,6 @@
 #include "color.h"
 #include "ray.h"
 #include "sphere.h"
-
-#define WIDTH 800
-#define HEIGHT 600
-
-typedef struct 	s_params
-{
-	void 		*mlx;
-	mlx_image_t *img;
-	double 		aspect_ratio;
-} 				t_params;
-
-/*
-to be passed to mlx_loop_hook to update the image
-*/
-void	draw(void *param)
-{
-	t_params	*params;
-
-	params = (t_params *)param;
-	(void)params;
-	// todo: update image
-}
-
 
 bool hit_sphere(const t_sphere *s, const t_ray *r) 
 {
@@ -71,18 +58,17 @@ t_color	ray_color(t_ray *r)
 
 int main(int argc, char **argv)
 {
-	t_params params;
 	(void)argc;
 	(void)argv;
 
 
 
  	// aspect_ratio is an ideal ratio
-	params.aspect_ratio = (double)16 / 9;
-	printf("aspect_ratio: %f\n", params.aspect_ratio);
+	double aspect_ratio = (double)16 / 9;
+	printf("aspect_ratio: %f\n", aspect_ratio);
 	int image_width = 400;
 	// calculate image height and ansure that it is at least 1
-	int image_height = (double)image_width / params.aspect_ratio;
+	int image_height = (double)image_width / aspect_ratio;
 	printf("image_height: %d\n", image_height);
 	image_height = (image_height < 1) ? 1 : image_height;
 	
@@ -172,22 +158,3 @@ int main(int argc, char **argv)
 
 
 }
-
-
-/*
-just a check. I was not sure if it is a good idea to create a struct in a func
-and return it by value. like an int or a double. But it seems to work. funny
-being useed to strings in C where it is not possible. so as long as I dont pass the pointer 
-but the whole thing it is going to work. it is passed by value.
-*/
-// typedef struct {
-//     double x;
-//     double y;
-// } Vec2;
-
-// Vec2 vec2_add(Vec2 a, Vec2 b) {
-//     Vec2 result;
-//     result.x = a.x + b.x;
-//     result.y = a.y + b.y;
-//     return result;
-// }
