@@ -1,7 +1,12 @@
 
 
-# miniRT
-This project is an introduction to the beautiful world of Raytracing.
+# Ray Tracing in One Weekend in C
+This project is an introduction to the beautiful world of Raytracing.  
+I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) has examples written in C++.  
+In preparation for a project at 42 Berlin I will code the raytracer in C.  
+
+These are my notes from the book and what I learned in the process.
+
 
 ## MLX42
 This project uses the MLX42 library to create the graphical interface. 
@@ -148,4 +153,12 @@ compiledb -n < build.log
 - [Raytracing the rest of your life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html)  
 
 - [MLX42](https://github.com/codam-coding-college/MLX42)  
-- stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.  
+- stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.
+- [https://gabrielgambetta.com/computer-graphics-from-scratch/](https://gabrielgambetta.com/computer-graphics-from-scratch/)  
+- A raytracer on the back of a business card. [https://fabiensanglard.net/rayTracing_back_of_business_card/](https://fabiensanglard.net/rayTracing_back_of_business_card/)
+
+here are a few really good resources by [Fabien Sanglard](https://fabiensanglard.net/about/index.html):
+
+scratchapixel.com : Great raytracer lessons written by professionals that have worked on Toy Story, Avatar, Lord of the Rings, Harry Potter, Pirates of the Caribbean and many other movies.
+An Introduction to Ray Tracing : An old book but a Classic.
+Physically Based Rendering : Heavy on maths but really good and well explained.
