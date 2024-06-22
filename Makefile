@@ -28,7 +28,8 @@ INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
 SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c ray.c sphere.c hittable.c ) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, utils.h vec3.h color.h sphere.h ray.h hittable.h hittable_list.h)
+HDRS 			= $(addprefix include/, utils.h vec3.h color.h sphere.h ray.h hittable.h hittable_list.h \
+rtweekend.h camera.h material.h)
 
 
 libft = $(LIBFTDIR)/libft.a
