@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/21 09:20:34 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/22 17:29:49 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_sphere sphere(t_point3 center, double radius)
 {
 	t_sphere s;
 
+	s.base.hit = hit_sphere;
 	s.center = center;
 	s.radius = radius;
 	return s;

@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 10:49:28 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/21 10:56:06 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/22 18:15:29 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include "ray.h"
 #include <stdbool.h>
 
-bool hit(t_hittablelist *hittablelist, const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec)
+bool hit(const void *self, const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec)
 {
+	 	t_hittablelist *hittablelist = (t_hittablelist *)self;
 		t_hit_record temp_rec;
 		bool hit_anything = false;
 		double closest_so_far = ray_tmax;
@@ -35,3 +36,12 @@ bool hit(t_hittablelist *hittablelist, const t_ray* r, double ray_tmin, double r
 	return (hit_anything);
 }
 
+t_hittablelist hittablelist(t_hittable **list, int size)
+{
+	t_hittablelist hittablelist;
+
+	hittablelist.list = list;
+	hittablelist.size = size;
+	hittablelist.hit = hit;
+	return (hittablelist);
+}

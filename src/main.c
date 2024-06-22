@@ -6,10 +6,11 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 15:24:16 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/22 18:11:21 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "rtweekend.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
@@ -20,38 +21,29 @@
 #include "color.h"
 #include "ray.h"
 #include "sphere.h"
+#include "hittable.h"
+#include "hittable_list.h"
+#include <float.h>
 
-t_color	ray_color(t_ray *r)
+t_color	ray_color(t_ray *r, const t_hittablelist *world)
 {
-	t_vec3		dir;
 	t_color		raycolor;
-	t_sphere	s;
-	double		t;	
-
-	t = 0;
-	dir = r->dir;
-	unit_vector(&dir);
-	s = sphere(point3(0, 0, -1), 0.5);
+	
 	t_hit_record rec;
-	if (hit_sphere(&s, r, 0.1, 5.0, &rec))
+	if ((world)->hit(world, r, 0, INFINITY, &rec))
 	{
-		const t_vec3 p_intersection = point_at(r, rec.t);
-		const t_vec3 inters_minus_center = vec3substr(&p_intersection, &s.center);
-		t_vec3 n = vec3divscalar(&inters_minus_center, s.radius);
-		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
+		t_color white = color(1.0, 1.0, 1.0);
+		t_vec3 target = vec3add(&rec.normal, &white);
+		raycolor = vec3multscalar(&target, 0.5);
 		return raycolor;
 	}
-	if (t > 0.0)
-	{
-		const t_vec3 p_intersection = point_at(r, t);
-		const t_vec3 center = vec3(0, 0, -1);
-		t_vec3 n = vec3substr(&p_intersection, &center);
-		unit_vector(&n);
-
-		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
-        return raycolor;
-	}
-	raycolor = backgroundcolor(&dir);
+	unit_vector(&(r->dir));
+	double a = 0.5 * (r->dir.p[1] + 1.0);
+	t_color white = color(1.0, 1.0, 1.0);
+	t_color blue = color(0.5, 0.7, 1.0);
+	t_color start = vec3multscalar(&white, 1.0 - a);
+	t_color end = vec3multscalar(&blue, a);
+	raycolor = vec3add(&start, &end);
 	return raycolor;
 }
 
@@ -61,7 +53,7 @@ int main(int argc, char **argv)
 	(void)argv;
 
  	// aspect_ratio is an ideal ratio
-	double aspect_ratio = (double)16 / 9;
+	double aspect_ratio = (double)16.0 / 9.0;
 	printf("aspect_ratio: %f\n", aspect_ratio);
 	int image_width = 400;
 	// calculate image height and ansure that it is at least 1
@@ -69,7 +61,17 @@ int main(int argc, char **argv)
 	printf("image_height: %d\n", image_height);
 	image_height = (image_height < 1) ? 1 : image_height;
 	
-	// viewport
+
+	// world
+	t_hittable *list[2];
+	t_sphere s = sphere(vec3(0, 0, -1), 0.5);
+	list[0] = (t_hittable*)(&s);
+	list[1] = NULL;
+	const t_hittablelist world = hittablelist(list, 1);
+
+
+	// viewport / camera
+	double focal_length = 1.0;
 	double viewport_height = 2.0;
 	// image is truncated... not rounded up therefore I recalculate the viewport width here
 	double viewport_width = viewport_height * ((double)image_width/image_height);
@@ -78,7 +80,6 @@ int main(int argc, char **argv)
 	// camera center. a point in 3D space from which all scene rays will originate
 	const t_vec3 camera_center = vec3(0, 0, 0);
 	// focal length. distance from the camera to the viewport
-	double focal_length = 1.0;
 
 	// 3d space conflicts with 2d image coordinates which start at the top left corner
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
@@ -104,8 +105,8 @@ int main(int argc, char **argv)
 	printf("pixel00_loc: ");
 	print_vec3(&pixel00_loc);
 
-    printf("hello world!\n");
-	
+
+	// render
 	// for the book course we create a ppm image
 	// create_ppm_image("test.ppm", WIDTH, HEIGHT);
 
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
 			// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
 			// so the direction vector is the pixel center
 			t_ray r = ray(&camera_center, &pixel_center);
-			t_color pixel_color = ray_color(&r);
+			t_color pixel_color = ray_color(&r, &world);
 			// print_vec3(&pixel_color);
 			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
 			write_color(file, &pixel_color);
