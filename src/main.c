@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 15:19:32 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/22 15:24:16 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,6 @@
 #include "color.h"
 #include "ray.h"
 #include "sphere.h"
-
-#define WIDTH 800
-#define HEIGHT 600
-
-typedef struct 	s_params
-{
-	void 		*mlx;
-	mlx_image_t *img;
-	double 		aspect_ratio;
-} 				t_params;
-
-/*
-to be passed to mlx_loop_hook to update the image
-*/
-void	draw(void *param)
-{
-	t_params	*params;
-
-	params = (t_params *)param;
-	(void)params;
-	// todo: update image
-}
 
 t_color	ray_color(t_ray *r)
 {

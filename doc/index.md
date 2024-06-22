@@ -3,43 +3,6 @@ I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracin
 These are my notes from the book and what I learned in the process.
 
 
-## MLX42
-Since I am a student at 42 Berlin for this project I will use the MLX42 library to create the graphical interface. 
-I choose to use this library as it is a maintained and updated version of the minilibx library. 
-To link the MLX42 I clone it from the codam-coding-college repository and link it to the project in the Makefile already:
-```
-# define the path to the mlx library
-LIBMLX			:= ./lib/MLX42
-
-# define the path to the mlx library archive - ldl is needed for linux 
-# to link to the dynamic linking loader and glfw is needed for the windowing system
-LIBS			:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
-
-# define the path to the mlx library headers
-INCLUDE			:= -I ./include -I $(LIBMLX)/include
-
-# my makefile rule will call the mlx library rule
-all: libmlx
-
-# if needed I can create a dir for the build - this is in the online documentation for the MLX42 library
-
-build:
-	@mkdir -p build
-	
-libmlx:
-	@if [ ! -d "lib/MLX42" ]; then \
-	git clone https://github.com/codam-coding-college/MLX42.git lib/MLX42; \
-	fi
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
-```
-
-The above will install the MLX42 library in the lib/MLX42 directory and link it to the project.
-when compiling I will need to use the $(INCLUDE) and $(LIBS) flags to include the library and headers.
-```
-	$(CC) $(CFLAGS) $(INCLUDE) $(LIBS) $(OBJS) -o $(NAME)
-```
-
-
 ## Raytracing
 At its core, a ray tracer sends rays through pixels and computes the color seen in the direction of those rays. The involved steps are
 
@@ -134,6 +97,107 @@ bool hit_sphere(const t_sphere *s, const t_ray *r)
 }
 ```
 
+# Which side of the sphere are we on?
+We need to choose to determine the side of the surface at the time of geometry intersection or at the time of coloring.
+This is a boolean determined with the dot product
+```
+bool front_face;
+if (dot(ray_direction, outward_normal) > 0.0) {
+    // ray is inside the sphere
+    normal = -outward_normal;
+    front_face = false;
+} else {
+    // ray is outside the sphere
+    normal = outward_normal;
+    front_face = true;
+}
+```
+
+## an array of shapes in C? How!?
+Thanks to this course I discovered that you can have polymorphic behavior in C. 
+It is a bit weird at first but totally doable.  
+
+I have a struct, t_hittable that has a function pointer to a hit function.  
+
+To create an array of different shapes (like spheres and cubes) that all implement the [`hittable`]interface or behaviour, I define a struct `t_hittable` that contains a function pointer for the `hit` function:
+
+```c
+typedef struct s_hittable {
+    bool (*hit)(const void* self, const t_ray* r, double t_min, double t_max, t_hit_record* rec);
+} t_hittable;
+```
+
+Then, for each shape (like a sphere or a cube), you create a struct that includes the `t_hittable` struct as its first member:
+
+```c
+typedef struct {
+    t_hittable base;
+    t_point3 center;
+    double radius;
+} sphere;
+
+typedef struct {
+    t_hittable base;
+    t_point3 min;
+    t_point3 max;
+} cube;
+```
+This is very important: the `hittable` struct must be the first member of the shape structs. This is because the C standard guarantees that the address of the first member of a struct is the same as the address of the struct itself. This allows you to cast a pointer to a `sphere` or `cube` to a `hittable` pointer and back without any issues.
+
+You can then define the `hit` functions for each shape:
+
+```c
+bool hit_sphere(const void* self, const t_ray* r, double t_min, double t_max, t_hit_record* rec) {
+    // implementation...
+}
+
+bool hit_cube(const void* self, const t_ray* r, double t_min, double t_max, t_hit_record* rec) {
+    // implementation...
+}
+```
+
+The functions all take a `const void* self` parameter, which is a pointer to the shape struct. This allows you to cast the pointer to the appropriate shape struct inside the function.
+
+When you create a new shape, you set the `hit` function pointer in the `hittable` struct to the appropriate function:
+
+```c
+sphere* new_sphere(t_point3 center, double radius) {
+    sphere* s = malloc(sizeof(sphere));
+    s->base.hit = hit_sphere;
+    s->center = center;
+    s->radius = radius;
+    return s;
+}
+
+cube* new_cube(t_point3 min, t_point3 max) {
+    cube* c = malloc(sizeof(cube));
+    c->base.hit = hit_cube;
+    c->min = min;
+    c->max = max;
+    return c;
+}
+```
+
+Finally, you can create an array of `t_hittable` pointers and add your shapes to it:
+
+```c
+hittable* shapes[10];
+shapes[0] = (hittable*)new_sphere(center1, radius1);
+shapes[1] = (hittable*)new_cube(min1, max1);
+// etc...
+```
+
+To check if a ray hits any of the shapes, you can loop over the array and call the `hit` function through the function pointer:
+
+```c
+for (int i = 0; i < 10; i++) {
+    if (shapes[i]->hit(shapes[i], r, t_min, t_max, &rec)) {
+        // hit
+    }
+}
+```
+
+## The Camera
 
 ## Extras - the compile_commands.json file
 If using nvim the LSP will ask for a compile_commands.json file. This file is can be generated by the compiledb tool. 
