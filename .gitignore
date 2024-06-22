@@ -56,3 +56,5 @@ miniRT
 src/test.c
 .cache/
 build.log
+inaweekend
+.gitignore
