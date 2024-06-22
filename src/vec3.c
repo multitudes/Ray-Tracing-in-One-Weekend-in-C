@@ -37,20 +37,6 @@ t_point3	point3(double x, double y, double z)
 	return result;
 }
 
-// do I need these getters? we are not in cpp here :)
-double	vec3x(const t_vec3 *v)
-{
-	return (v->p[0]);
-}
-double 	vec3y(const t_vec3 *v)
-{
-	return (v->p[1]);
-}
-double 	vec3z(const t_vec3 *v)
-{
-	return (v->p[2]);
-}
-
 
 t_vec3	vec3negate(const t_vec3 *a)
 {
@@ -103,7 +89,7 @@ t_vec3	vec3multscalar(const t_vec3 *a, double t)
 	return result;
 }
 
-t_vec3	vec3divide(const t_vec3 *a, double t)
+t_vec3	vec3divscalar(const t_vec3 *a, double t)
 {
 	t_vec3 result;
 
@@ -163,7 +149,9 @@ Modify in place
 */
 void unit_vector(t_vec3 *v)
 {
-    double length = length3(v);
+    double length;
+
+	length = length3(v);
     v->p[0] /= length;
     v->p[1] /= length;
     v->p[2] /= length;

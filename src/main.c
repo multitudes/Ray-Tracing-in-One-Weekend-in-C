@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 14:47:35 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/22 15:19:32 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,38 +21,59 @@
 #include "ray.h"
 #include "sphere.h"
 
-bool hit_sphere(const t_sphere *s, const t_ray *r) 
-{
-    t_vec3 cq = vec3substr(&(s->center), &(r->orig));
-    double a = dot(&(r->dir), &(r->dir));
-    double b = -2.0 * dot(&(r->dir), &cq);
-    double c = dot(&cq, &cq) - s->radius * s->radius;
-    double discriminant = b*b - 4*a*c;
-    return (discriminant >= 0);
-}
+#define WIDTH 800
+#define HEIGHT 600
 
+typedef struct 	s_params
+{
+	void 		*mlx;
+	mlx_image_t *img;
+	double 		aspect_ratio;
+} 				t_params;
+
+/*
+to be passed to mlx_loop_hook to update the image
+*/
+void	draw(void *param)
+{
+	t_params	*params;
+
+	params = (t_params *)param;
+	(void)params;
+	// todo: update image
+}
 
 t_color	ray_color(t_ray *r)
 {
-	t_vec3	dir;
-	t_color raycolor;
-	
+	t_vec3		dir;
+	t_color		raycolor;
+	t_sphere	s;
+	double		t;	
+
+	t = 0;
 	dir = r->dir;
-	const t_sphere s = sphere(point3(0, 0, -1), 0.5);
-	if (hit_sphere(&s, r))
+	unit_vector(&dir);
+	s = sphere(point3(0, 0, -1), 0.5);
+	t_hit_record rec;
+	if (hit_sphere(&s, r, 0.1, 5.0, &rec))
 	{
-		raycolor = color(1, 0, 0);
+		const t_vec3 p_intersection = point_at(r, rec.t);
+		const t_vec3 inters_minus_center = vec3substr(&p_intersection, &s.center);
+		t_vec3 n = vec3divscalar(&inters_minus_center, s.radius);
+		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
+		return raycolor;
+	}
+	if (t > 0.0)
+	{
+		const t_vec3 p_intersection = point_at(r, t);
+		const t_vec3 center = vec3(0, 0, -1);
+		t_vec3 n = vec3substr(&p_intersection, &center);
+		unit_vector(&n);
+
+		raycolor = color((n.p[0] + 1) / 2, (n.p[1] + 1) / 2, (n.p[2] + 1) / 2);
         return raycolor;
 	}
-	unit_vector(&dir);
-	double a = 0.5 * (dir.p[1] + 1.0);
-	// printf("a: %f\n", a);
-	t_color white = vec3(1.0, 1.0, 1.0);
-	t_color blue = vec3(0.5, 0.7, 1.0);
-	t_color white_scaled = vec3multscalar(&white, 1.0 - a);
-	t_color blue_scaled = vec3multscalar(&blue, a);
-	raycolor = vec3add(&white_scaled, &blue_scaled);
-	// print_vec3(&color);
+	raycolor = backgroundcolor(&dir);
 	return raycolor;
 }
 
@@ -60,8 +81,6 @@ int main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
-
-
 
  	// aspect_ratio is an ideal ratio
 	double aspect_ratio = (double)16 / 9;
@@ -132,11 +151,11 @@ int main(int argc, char **argv)
 			
 			const t_point3 pixel_center = vec3add(&pixel00_loc, &deltas);
 
-// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
-// so the direction vector is the pixel center
+			// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
+			// so the direction vector is the pixel center
 			t_ray r = ray(&camera_center, &pixel_center);
 			t_color pixel_color = ray_color(&r);
-			print_vec3(&pixel_color);
+			// print_vec3(&pixel_color);
 			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
 			write_color(file, &pixel_color);
 		}

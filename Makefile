@@ -26,9 +26,9 @@ SRC_DIR			= src/
 
 INCLUDE			+= -I ./include -I $(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c ray.c sphere.c) 
+SRCS 			= $(addprefix $(SRC_DIR), main.c utils.c vec3.c color.c ray.c sphere.c hittable.c ) 
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, utils.h vec3.h color.h sphere.h ray.h)
+HDRS 			= $(addprefix include/, utils.h vec3.h color.h sphere.h ray.h hittable.h hittable_list.h)
 
 
 libft = $(LIBFTDIR)/libft.a
