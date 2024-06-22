@@ -1,9 +1,4 @@
-
-
-# Ray Tracing in One Weekend in C
-This project is an introduction to the beautiful world of Raytracing.  
-I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) has examples written in C++.  
-In preparation for a project at 42 Berlin I will code the raytracer in C.  
+I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) but writing the code in C for good practice.  
 
 These are my notes from the book and what I learned in the process.
 
