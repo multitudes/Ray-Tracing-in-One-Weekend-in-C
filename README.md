@@ -4,7 +4,7 @@ These are my notes from the book and what I learned in the process.
 
 
 ## MLX42
-This project uses the MLX42 library to create the graphical interface. 
+Since I am a student at 42 Berlin for this project I will use the MLX42 library to create the graphical interface. 
 I choose to use this library as it is a maintained and updated version of the minilibx library. 
 To link the MLX42 I clone it from the codam-coding-college repository and link it to the project in the Makefile already:
 ```
