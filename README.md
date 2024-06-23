@@ -271,6 +271,52 @@ The camera is responsible for two important jobs:
 After main creates a camera and sets default values, it will call the render() method.  
 The render() method will prepare the camera for rendering and then execute the render loop.
 
+## Passing by value or by reference?
+In C++ we have references which are variables that can be passed around without copying. In C we have pointers. But pointers bring a problem. 
+If I declare the sum like
+```
+t_vec3 add(t_vec3 *a, t_vec3 *b)
+{
+	t_vec3 sum;
+	sum.x = a->x + b->x;
+	sum.y = a->y + b->y;
+	sum.z = a->z + b->z;
+	return (sum);
+}
+```
+Then if using the add functions for two vectors I have to pass pointers then I cannot use the add function with the result of another add function. Like this is working but I have to create a temp extra var c:
+```
+t_vec3 a = vec3(1, 2, 3);
+t_vec3 b = vec3(4, 5, 6);
+t_vec3 c = add(&a, &b);
+t_vec3 d = add(&c, &c);
+```
+This will not work because the add function expects pointers and I cannot in C take the pointer of a rvalue return value . So I will have to use the add function like this:
+```	
+t_vec3 a = vec3(1, 2, 3);
+t_vec3 b = vec3(4, 5, 6);
+t_vec3 c = vec3(&add(&a, &b), &add(&a, &b));
+```
+
+With small structs there is a very small performance hit when passing by value. So I will pass by value and this allows to chain functions and have better readable code.
+```
+t_vec3 add(t_vec3 a, t_vec3 b)
+{
+	t_vec3 sum;
+	sum.x = a.x + b.x;
+	sum.y = a.y + b.y;
+	sum.z = a.z + b.z;
+	return (sum);
+}
+```
+now:
+```
+t_vec3 a = vec3(1, 2, 3);	
+t_vec3 b = vec3(4, 5, 6);
+t_vec3 d = add(add(a, b), add(a, b));
+```
+It is much nicer.
+
 
 
 ## Extras - the compile_commands.json file

@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:27:38 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 11:41:23 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,8 @@ void	render(t_camera c, const t_hittablelist world)
 		for (int i = 0; i < c.image_width; i++)
 		{	
 			t_point3 deltas = vec3(c.pixel_delta_u.p[0] * i, c.pixel_delta_v.p[1] * j, 0.0);
-			
 			const t_point3 pixel_center = vec3add(c.pixel00_loc, deltas);
-
-			// direction vector from camera to pixel is the pixel location minus the camera center and the camera center is 0,0,0 in this case
-			// so the direction vector is the pixel center
-			t_ray r = ray(&c.center, &pixel_center);
+			t_ray r = ray(c.center, pixel_center);
 			t_color pixel_color = ray_color(&r, &world);
 			// print_vec3(&pixel_color);
 			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
@@ -105,17 +101,13 @@ t_color	ray_color(t_ray *r, const t_hittablelist *world)
 	t_hit_record rec;
 	if ((world)->hit(world, r, interval(0, INFINITY), &rec))
 	{
-		t_color white = color(1.0, 1.0, 1.0);
-		t_vec3 target = vec3add(rec.normal, white);
-		raycolor = vec3multscalar(target, 0.5);
+		raycolor = vec3multscalar(vec3add(rec.normal, color(1.0, 1.0, 1.0)), 0.5);
 		return raycolor;
 	}
 	r->dir = unit_vector(r->dir);
 	double a = 0.5 * (r->dir.p[1] + 1.0);
-	t_color white = color(1.0, 1.0, 1.0);
-	t_color blue = color(0.5, 0.7, 1.0);
-	t_color start = vec3multscalar(white, 1.0 - a);
-	t_color end = vec3multscalar(blue, a);
+	t_color start = vec3multscalar(color(1.0, 1.0, 1.0), 1.0 - a);
+	t_color end = vec3multscalar(color(0.5, 0.7, 1.0), a);
 	raycolor = vec3add(start, end);
 	return raycolor;
 }
