@@ -350,7 +350,7 @@ To do so we will create a random number generator to sample the colors around th
 
 Here the C random number generator has been apparently superiour to the c++ one for quite some time. Interesting.
 <div style="text-align: center;">
-<img src="assets/before.png" alt="First Image" style="width: 40%;display: inline-block;" /> 
+<img src="assets/before_antialias.png" alt="First Image" style="width: 40%;display: inline-block;" /> 
 <img src="assets/after.png" alt="Second Image" style="width: 40%;display: inline-block;" />
 </div>
 
