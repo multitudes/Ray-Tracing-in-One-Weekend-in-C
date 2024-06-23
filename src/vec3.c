@@ -13,6 +13,7 @@
 #include "vec3.h"
 #include <stdio.h>
 #include <math.h>
+#include "rtweekend.h"
 
 /*
  * This is the C equivalent of a C++ initializer
@@ -99,12 +100,12 @@ t_vec3	vec3divscalar(const t_vec3 a, double t)
 	return result;
 }
   
-double	length3_squared(const t_vec3 *v)
+double	length3_squared(const t_vec3 v)
 {
-	return (v->x * v->x + v->y * v->y + v->z * v->z);
+	return (v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-double	length3(const t_vec3 *v)
+double	length3(const t_vec3 v)
 {
 	return (sqrt(length3_squared(v)));
 }
@@ -142,17 +143,12 @@ t_vec3	vec3cross(const t_vec3 a, const t_vec3 b)
 	return result;
 }
 
-/*
-Modify in place
-*/
-t_vec3 unit_vector(t_vec3 v)
+t_vec3 random_vec3() 
 {
-    double length;
-
-	length = length3(&v);
-	v.x /= length;
-	v.y /= length;
-	v.z /= length;
-	return v;
+    return vec3(random_d(), random_d(), random_d());
 }
 
+t_vec3 random_min_max(double min, double max) 
+{
+    return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+}

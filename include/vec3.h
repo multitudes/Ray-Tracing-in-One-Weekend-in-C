@@ -40,8 +40,8 @@ t_vec3	vec3mult(const t_vec3 a, const t_vec3 b);
 t_vec3	vec3multscalar(const t_vec3 a, double t);
 t_vec3	vec3divscalar(const t_vec3 a, double t);
   
-double	length3_squared(const t_vec3 *v);
-double	length3(const t_vec3 *v);
+double	length3_squared(const t_vec3 v);
+double	length3(const t_vec3 v);
 
 // Vector Utility Functions
 
@@ -49,6 +49,21 @@ void	print_vec3(const t_vec3 *v);
 
 double	dot(const t_vec3 a, const t_vec3 b);
 t_vec3	vec3cross(const t_vec3 a, const t_vec3 b);
-t_vec3	unit_vector(t_vec3 v);
+
+t_vec3	random_vec3();
+t_vec3	random_min_max(double min, double max);
+
+inline t_vec3 unit_vector(t_vec3 v)
+{
+	return vec3divscalar(v, length3(v));
+}
+
+inline t_vec3 random_in_unit_sphere() {
+    while (1) {
+        t_vec3 p = random_vec3(-1,1);
+        if (length3_squared(p) < 1)
+            return p;
+    }
+}
 
 #endif

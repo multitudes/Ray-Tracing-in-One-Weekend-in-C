@@ -350,8 +350,8 @@ To do so we will create a random number generator to sample the colors around th
 
 Here the C random number generator has been apparently superiour to the c++ one for quite some time. Interesting.
 <div style="text-align: center;">
-<img src="assets/before_antialias.png" alt="First Image" style="width: 40%;display: inline-block;" /> 
-<img src="assets/after.png" alt="Second Image" style="width: 40%;display: inline-block;" />
+<img src="assets/before_antialias.png" alt="First Image" style="width: 45%;display: inline-block;" /> 
+<img src="assets/after.png" alt="Second Image" style="width: 45%;display: inline-block;" />
 </div>
 
 ## Extras - the compile_commands.json file
@@ -360,6 +360,22 @@ If using nvim the LSP will ask for a compile_commands.json file. This file is ca
 make clean && make > build.log
 compiledb -n < build.log      
 ```
+
+## Diffuse materials
+
+Diffuse objects that don’t emit their own light merely take on the color of their surroundings, but they do modulate that with their own intrinsic color. Light that reflects off a diffuse surface has its direction randomized.  
+We will add the ability to generate arbitrary random vectors to our t_vec3 type. This will be useful for generating random directions for diffuse materials. 
+```c
+
+t_vec3 random() {
+    return vec3(random_d(), random_d(), random_d());
+}
+
+t_vec3 random(double min, double max) {
+    return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+}
+```
+Then we need to figure out how to manipulate a random vector so that we only get results that are on the surface of a hemisphere.  
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

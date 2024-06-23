@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 13:10:58 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 14:28:25 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record
 {
 	const t_sphere *s = (t_sphere *)self;
     t_vec3 oc = vec3substr(s->center, r->orig);
-    double a = length3_squared(&r->dir); 
+    double a = length3_squared(r->dir); 
     double h = dot(r->dir, oc);
-	double c = length3_squared(&oc) - s->radius * s->radius;
+	double c = length3_squared(oc) - s->radius * s->radius;
     double discriminant = h*h - a*c;
 
 	if (discriminant < 0)
