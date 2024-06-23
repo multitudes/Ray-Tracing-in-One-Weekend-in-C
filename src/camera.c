@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 13:40:26 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 14:43:05 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,20 +98,18 @@ void	render(t_camera c, const t_hittablelist world)
 
 t_color	ray_color(t_ray *r, const t_hittablelist *world)
 {
-	t_color		raycolor;
-	
 	t_hit_record rec;
 	if ((world)->hit(world, r, interval(0, INFINITY), &rec))
 	{
-		raycolor = vec3multscalar(vec3add(rec.normal, color(1.0, 1.0, 1.0)), 0.5);
-		return raycolor;
+		t_vec3 direction = random_on_hemisphere(rec.normal);
+		t_ray scattered = ray(rec.p, direction);
+		return vec3multscalar(ray_color(&scattered, world), 0.5);
 	}
-	r->dir = unit_vector(r->dir);
-	double a = 0.5 * (r->dir.y + 1.0);
+	t_vec3 unit_direction = unit_vector(r->dir);
+	double a = 0.5 * (unit_direction.y + 1.0);
 	t_color start = vec3multscalar(color(1.0, 1.0, 1.0), 1.0 - a);
 	t_color end = vec3multscalar(color(0.5, 0.7, 1.0), a);
-	raycolor = vec3add(start, end);
-	return raycolor;
+	return vec3add(start, end);
 }
 
 t_ray get_ray(t_camera *c, int i, int j)  

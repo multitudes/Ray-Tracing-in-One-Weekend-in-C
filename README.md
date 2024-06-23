@@ -377,7 +377,12 @@ t_vec3 random_vec3_min_max(double min, double max)
     return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
 }
 ```
-Then we need to figure out how to manipulate a random vector so that we only get results that are on the surface of a hemisphere.  
+Then we need to figure out how to manipulate a random vector so that we only get results that are on the surface of a hemisphere, the side where we have our normal.  
+The book explains that we can generate a random vector in the unit cube and then check if it is inside the unit sphere. If it is not we discard it. This is called rejection sampling.
+
+The result is now gray and it takes quite a while to generate due to the recursive method in our ray_color function.  
+
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
