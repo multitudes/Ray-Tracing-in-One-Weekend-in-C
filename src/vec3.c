@@ -147,13 +147,14 @@ t_vec3	vec3cross(const t_vec3 a, const t_vec3 b)
 /*
 Modify in place
 */
-void unit_vector(t_vec3 *v)
+t_vec3 unit_vector(t_vec3 v)
 {
     double length;
 
-	length = length3(v);
-    v->p[0] /= length;
-    v->p[1] /= length;
-    v->p[2] /= length;
+	length = length3(&v);
+    v.p[0] /= length;
+    v.p[1] /= length;
+    v.p[2] /= length;
+	return v;
 }
 

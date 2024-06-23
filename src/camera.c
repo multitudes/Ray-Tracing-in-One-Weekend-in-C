@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:15:36 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 11:27:38 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_color	ray_color(t_ray *r, const t_hittablelist *world)
 		raycolor = vec3multscalar(target, 0.5);
 		return raycolor;
 	}
-	unit_vector(&(r->dir));
+	r->dir = unit_vector(r->dir);
 	double a = 0.5 * (r->dir.p[1] + 1.0);
 	t_color white = color(1.0, 1.0, 1.0);
 	t_color blue = color(0.5, 0.7, 1.0);
