@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 18:11:21 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 09:10:02 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ int main(int argc, char **argv)
 
 	// world
 	t_hittable *list[2];
-	t_sphere s = sphere(vec3(0, 0, -1), 0.5);
-	list[0] = (t_hittable*)(&s);
-	list[1] = NULL;
-	const t_hittablelist world = hittablelist(list, 1);
+	t_sphere s1 = sphere(vec3(0, 0, -1), 0.5);
+	t_sphere s2 = sphere(vec3(0, -100.5, -1), 100);
+	list[0] = (t_hittable*)(&s1);
+	list[1] = (t_hittable*)(&s2);
+	const t_hittablelist world = hittablelist(list, 2);
 
 
 	// viewport / camera

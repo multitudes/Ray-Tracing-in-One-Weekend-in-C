@@ -117,11 +117,11 @@ if (dot(ray_direction, outward_normal) > 0.0) {
 }
 ```
 
-## an array of shapes in C? How!?
+## An array of shapes in C? How!?
 Thanks to this course I discovered that you can have polymorphic behavior in C. 
 It is a bit weird at first but totally doable.  
 
-I have a struct, t_hittable that has a function pointer to a hit function.  
+I have a struct, `t_hittable` that has a function pointer to a hit function.  
 
 To create an array of different shapes (like spheres and cubes) that all implement the [`hittable`]interface or behaviour, I define a struct `t_hittable` that contains a function pointer for the `hit` function:
 
@@ -146,7 +146,8 @@ typedef struct {
     t_point3 max;
 } cube;
 ```
-This is very important: the `hittable` struct must be the first member of the shape structs. This is because the C standard guarantees that the address of the first member of a struct is the same as the address of the struct itself. This allows you to cast a pointer to a `sphere` or `cube` to a `hittable` pointer and back without any issues.
+**This is very important: the `hittable` struct must be the first member of the shape structs.**  
+This is because the C standard guarantees that the address of the first member of a struct is the same as the address of the struct itself. This allows you to cast a pointer to a `sphere` or `cube` to a `hittable` pointer and back without any issues.
 
 You can then define the `hit` functions for each shape:
 
@@ -165,31 +166,41 @@ The functions all take a `const void* self` parameter, which is a pointer to the
 When you create a new shape, you set the `hit` function pointer in the `hittable` struct to the appropriate function:
 
 ```c
-sphere* new_sphere(t_point3 center, double radius) {
+t_sphere* new_sphere(t_point3 center, double radius) {
     sphere* s = malloc(sizeof(sphere));
     s->base.hit = hit_sphere;
     s->center = center;
     s->radius = radius;
     return s;
 }
-
-cube* new_cube(t_point3 min, t_point3 max) {
-    cube* c = malloc(sizeof(cube));
-    c->base.hit = hit_cube;
-    c->min = min;
-    c->max = max;
-    return c;
-}
 ```
-
-Finally, you can create an array of `t_hittable` pointers and add your shapes to it:
+Or actually without malloc is also possible since I have small structs I can return them by value.  
+I did not do the necessary tests but I imagine Using malloc to allocate memory would take use some 
+extra time. Stack is faster than heap, but then I copy the struct when returning it. I do not yet know which is faster.  
 
 ```c
-hittable* shapes[10];
-shapes[0] = (hittable*)new_sphere(center1, radius1);
-shapes[1] = (hittable*)new_cube(min1, max1);
-// etc...
+t_sphere new_sphere(t_point3 center, double radius) {
+	sphere s;
+	s.base.hit = hit_sphere;
+	s.center = center;
+	s.radius = radius;
+	return s;
+}
 ```
+Then in the main function, you can create a list of `t_hittable` pointers and add your shapes to it:
+
+```c
+t_hittable *list[2];
+t_sphere s1 = sphere(vec3(0, 0, -1), 0.5);
+t_sphere s2 = sphere(vec3(0, -100.5, -1), 100);
+list[0] = (t_hittable*)(&s1);
+list[1] = (t_hittable*)(&s2);
+const t_hittablelist world = hittablelist(list, 2);
+
+```
+
+This already works and I get the second sphere creating a nice background.
+![sphere](assets/test2.ppm)
 
 To check if a ray hits any of the shapes, you can loop over the array and call the `hit` function through the function pointer:
 

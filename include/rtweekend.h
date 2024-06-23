@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:34:23 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 17:47:48 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 08:57:39 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 #include <math.h>
 #include <limits.h>
 
-#ifdef __linux__
-#define INFINITY DBL_MAX
-#endif
+
 
 #define PI 3.1415926535897932385
 
