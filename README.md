@@ -365,13 +365,15 @@ compiledb -n < build.log
 
 Diffuse objects that don’t emit their own light merely take on the color of their surroundings, but they do modulate that with their own intrinsic color. Light that reflects off a diffuse surface has its direction randomized.  
 We will add the ability to generate arbitrary random vectors to our t_vec3 type. This will be useful for generating random directions for diffuse materials. 
+In c++ they are both called random but I cannot use the same name in C. I will call them random_vec3 and random_vec3_min_max.
 ```c
-
-t_vec3 random() {
+t_vec3 random_vec3() 
+{
     return vec3(random_d(), random_d(), random_d());
 }
 
-t_vec3 random(double min, double max) {
+t_vec3 random_vec3_min_max(double min, double max) 
+{
     return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
 }
 ```

@@ -148,7 +148,7 @@ t_vec3 random_vec3()
     return vec3(random_d(), random_d(), random_d());
 }
 
-t_vec3 random_min_max(double min, double max) 
+t_vec3 random_vec3_min_max(double min, double max) 
 {
     return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
 }
