@@ -349,9 +349,9 @@ We need to sample the light falling around the pixel, and integrate the changes.
 To do so we will create a random number generator to sample the colors around the pixel in a random way. 
 
 Here the C random number generator has been apparently superiour to the c++ one for quite some time. Interesting.
-<div>
-<img src="assets/before.png" alt="First Image" style="width: 50%" /> 
-<img src="assets/after.png" alt="Second Image" style="width: 50%" />
+<div style="text-align: center;">
+<img src="assets/before.png" alt="First Image" style="width: 40%;display: inline-block;" /> 
+<img src="assets/after.png" alt="Second Image" style="width: 40%;display: inline-block;" />
 </div>
 
 ## Extras - the compile_commands.json file
