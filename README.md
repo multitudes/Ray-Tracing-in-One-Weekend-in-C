@@ -257,6 +257,10 @@ t_hittablelist hittablelist(t_hittable **list, int size)
 }
 ```
 
+## Useful to have - An Interval type
+
+In C++ it is a class, in C it will be a struct.
+
 ## The Camera
 
 ## Extras - the compile_commands.json file

@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hittable_list.h                                    :+:      :+:    :+:   */
+/*   interval.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 08:21:39 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:08:26 by lbrusa           ###   ########.fr       */
+/*   Created: 2024/06/23 09:59:43 by lbrusa            #+#    #+#             */
+/*   Updated: 2024/06/23 10:00:16 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HITTABLE_LIST_H
-#define HITTABLE_LIST_H
+#include "interval.h"
 
-#include "hittable.h"
+/*
+ * initializer
+ */
+t_interval interval(double min, double max)
+{
+	t_interval i;
 
-
-typedef struct 	s_hittablelist {
-	t_hittable 	**list;
-	int 		size;
-	bool 		(*hit)(const void* self, const t_ray* r, t_interval ray_t, t_hit_record* rec);
-} 				t_hittablelist; 
-
-t_hittablelist hittablelist(t_hittable **list, int size);
-
-#endif
+	i.min = min;
+	i.max = max;
+	return (i);
+}

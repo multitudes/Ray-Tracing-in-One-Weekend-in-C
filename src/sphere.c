@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/22 17:29:49 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 10:12:55 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_sphere sphere(t_point3 center, double radius)
  * double c = dot(&oc, &oc) - s->radius * s->radius;
  * but this has been refactored using double h 
  */
-bool hit_sphere(const void *self, const t_ray *r, double ray_tmin, double ray_tmax, t_hit_record *rec) 
+bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record *rec) 
 {
 	const t_sphere *s = (t_sphere *)self;
     t_vec3 oc = vec3substr(&(s->center), &(r->orig));
@@ -55,10 +55,11 @@ bool hit_sphere(const void *self, const t_ray *r, double ray_tmin, double ray_tm
 		return (false);
 	double sqrtd = sqrt(discriminant);
 	double root = (h - sqrtd) / a;
-	if (root <= ray_tmin || ray_tmax <= root) {
-	root = (h + sqrtd) / a;
-	if (root <= ray_tmin || ray_tmax <= root)
-		return false;
+	if (!surrounds(&ray_t, root))
+	{
+		root = (h + sqrtd) / a;
+		if (!surrounds(&ray_t, root))
+			return false;
     }
 	rec->t = root;
 	rec->p = point_at(r, rec->t);
