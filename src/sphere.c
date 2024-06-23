@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:13:56 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 11:23:59 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record
 	const t_sphere *s = (t_sphere *)self;
     t_vec3 oc = vec3substr(&(s->center), &(r->orig));
     double a = length3_squared(&r->dir); 
-    double h = dot(&(r->dir), &oc);
+    double h = dot(r->dir, oc);
 	double c = length3_squared(&oc) - s->radius * s->radius;
     double discriminant = h*h - a*c;
 
@@ -65,14 +65,14 @@ bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record
 	rec->p = point_at(r, rec->t);
 	t_vec3 inters_minus_center = vec3substr(&rec->p, &(s->center));
 	rec->normal = vec3divscalar(inters_minus_center, s->radius);
-	set_face_normal(rec, r, &rec->normal);
+	set_face_normal(rec, r, rec->normal);
 
 	return (true);
 }
 
 
-void set_face_normal(t_hit_record *rec, const t_ray *r, const t_vec3 *outward_normal)
+void set_face_normal(t_hit_record *rec, const t_ray *r, const t_vec3 outward_normal)
 {
-	rec->front_face = dot(&r->dir, outward_normal) < 0;
-	rec->normal = rec->front_face ? *outward_normal : vec3negate(*outward_normal);
+	rec->front_face = dot(r->dir, outward_normal) < 0;
+	rec->normal = rec->front_face ? outward_normal : vec3negate(outward_normal);
 }

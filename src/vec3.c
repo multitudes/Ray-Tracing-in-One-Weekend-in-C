@@ -68,13 +68,13 @@ t_vec3	vec3substr(const t_vec3 *a, const t_vec3 *b)
 	return result;
 }
 
-t_vec3	vec3mult(const t_vec3 *a, const t_vec3 *b)
+t_vec3	vec3mult(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[0] * b->p[0];
-	result.p[1] = a->p[1] * b->p[1];
-	result.p[2] = a->p[2] * b->p[2];
+	result.p[0] = a.p[0] * b.p[0];
+	result.p[1] = a.p[1] * b.p[1];
+	result.p[2] = a.p[2] * b.p[2];
 	return result;
 
 }
@@ -121,26 +121,26 @@ void	print_vec3(const t_vec3 *v)
 /*
  * dot product of vectors a . b = a1*b1 + a2*b2 + a3*b3
  */
-double	dot(const t_vec3 *a, const t_vec3 *b)
+double	dot(const t_vec3 a, const t_vec3 b)
 {
 	double result;
 
-	result = a->p[0] * b->p[0];
-	result += a->p[1] * b->p[1];
-	result += a->p[2] * b->p[2];
+	result = a.p[0] * b.p[0];
+	result += a.p[1] * b.p[1];
+	result += a.p[2] * b.p[2];
 	return result;
 }
 
 /*
 returns the cross product of a and b by value
 */
-t_vec3	vec3cross(const t_vec3 *a, const t_vec3 *b)
+t_vec3	vec3cross(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[1] * b->p[2] - a->p[2] * b->p[1];
-	result.p[1] = a->p[2] * b->p[0] - a->p[0] * b->p[2];
-	result.p[2] = a->p[0] * b->p[1] - a->p[1] * b->p[0];
+	result.p[0] = a.p[1] * b.p[2] - a.p[2] * b.p[1];
+	result.p[1] = a.p[2] * b.p[0] - a.p[0] * b.p[2];
+	result.p[2] = a.p[0] * b.p[1] - a.p[1] * b.p[0];
 	return result;
 }
 
