@@ -38,23 +38,23 @@ t_point3	point3(double x, double y, double z)
 }
 
 
-t_vec3	vec3negate(const t_vec3 *a)
+t_vec3	vec3negate(const t_vec3 a)
 {
 	t_vec3 result;
 
-	result.p[0] = -a->p[0];
-	result.p[1] = -a->p[1];
-	result.p[2] = -a->p[2];
+	result.p[0] = -a.p[0];
+	result.p[1] = -a.p[1];
+	result.p[2] = -a.p[2];
 	return result;
 }
 
-t_vec3	vec3add(const t_vec3 *a, const t_vec3 *b)
+t_vec3	vec3add(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[0] + b->p[0];
-	result.p[1] = a->p[1] + b->p[1];
-	result.p[2] = a->p[2] + b->p[2];
+	result.p[0] = a.p[0] + b.p[0];
+	result.p[1] = a.p[1] + b.p[1];
+	result.p[2] = a.p[2] + b.p[2];
 	return result;
 }
 
@@ -79,23 +79,23 @@ t_vec3	vec3mult(const t_vec3 *a, const t_vec3 *b)
 
 }
 
-t_vec3	vec3multscalar(const t_vec3 *a, double t)
+t_vec3	vec3multscalar(const t_vec3 a, double t)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[0] * t;
-	result.p[1] = a->p[1] * t;
-	result.p[2] = a->p[2] * t;
+	result.p[0] = a.p[0] * t;
+	result.p[1] = a.p[1] * t;
+	result.p[2] = a.p[2] * t;
 	return result;
 }
 
-t_vec3	vec3divscalar(const t_vec3 *a, double t)
+t_vec3	vec3divscalar(const t_vec3 a, double t)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[0] / t;
-	result.p[1] = a->p[1] / t;
-	result.p[2] = a->p[2] / t;
+	result.p[0] = a.p[0] / t;
+	result.p[1] = a.p[1] / t;
+	result.p[2] = a.p[2] / t;
 	return result;
 }
   
