@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 09:53:54 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:16:33 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 10:18:56 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,30 @@
 #include <stdbool.h>
 #include <math.h>
 
-
+/*
+ * Used to represent a range of t values
+ */
 typedef struct	s_interval
 {
 	double		min;
 	double		max;
 }				t_interval;
 
+/*
+ * Initializer
+ */
 t_interval interval(double min, double max);
 
+/*
+ * Returns the size of the interval
+ */
 inline double size(const t_interval *i)
 {
 	return (i->max - i->min);
 }
 
 /*
- * The contains will return true for values including edges
+ * Will return true for values including boundaries
  */
 inline bool contains(const t_interval *i, double x)
 {
@@ -39,8 +47,7 @@ inline bool contains(const t_interval *i, double x)
 }
 
 /*
- * the surrounds will return false for values inside but
- * not including the boundaries of the interval
+ * Will return true for values inside excluding boundaries
  */
 inline bool surrounds(const t_interval *i, double x)
 {
