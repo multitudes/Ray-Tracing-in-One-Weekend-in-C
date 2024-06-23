@@ -382,7 +382,10 @@ The book explains that we can generate a random vector in the unit cube and then
 
 The result is now gray and it takes quite a while to generate due to the recursive method in our ray_color function.  
 
-
+<div style="text-align: center;">
+<img src="assets/diffuse.png" alt="First Image" style="width: 45%;display: inline-block;" /> 
+<img src="assets/after.png" alt="Second Image" style="width: 45%;display: inline-block;" />
+</div>
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
