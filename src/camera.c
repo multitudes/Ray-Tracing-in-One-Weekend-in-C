@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 14:43:05 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:01:44 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@
 t_camera camera()
 {
 	t_camera c;
-
+	
+	c.max_depth = 10;
 	c.samples_per_pixel = 10;
 	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 	c.aspect_ratio = (double)16.0 / 9.0;
@@ -86,7 +87,7 @@ void	render(t_camera c, const t_hittablelist world)
 			t_color pixel_color = color(0,0,0);
             for (int sample = 0; sample < c.samples_per_pixel; sample++) {
                     t_ray r = get_ray(&c, i, j);
-					t_color partial = ray_color(&r, &world);
+					t_color partial = ray_color(&r, c.max_depth, &world);
                     pixel_color = vec3add(pixel_color, partial);
                 }
 			write_color(file, vec3multscalar(pixel_color, c.pixel_samples_scale));
@@ -96,14 +97,16 @@ void	render(t_camera c, const t_hittablelist world)
 }
 
 
-t_color	ray_color(t_ray *r, const t_hittablelist *world)
+t_color	ray_color(t_ray *r, const int depth, const t_hittablelist *world)
 {
 	t_hit_record rec;
-	if ((world)->hit(world, r, interval(0, INFINITY), &rec))
+	if (depth <= 0)
+        return color(0,0,0);
+	if ((world)->hit(world, r, interval(0.001, INFINITY), &rec))
 	{
 		t_vec3 direction = random_on_hemisphere(rec.normal);
 		t_ray scattered = ray(rec.p, direction);
-		return vec3multscalar(ray_color(&scattered, world), 0.5);
+		return vec3multscalar(ray_color(&scattered, depth - 1, world), 0.5);
 	}
 	t_vec3 unit_direction = unit_vector(r->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);

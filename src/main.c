@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 13:45:21 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 14:51:29 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int main(int argc, char **argv)
     cam.image_width       = 400;
     cam.samples_per_pixel = 100;
 	cam.pixel_samples_scale = 1.0 / cam.samples_per_pixel;
+	cam.max_depth         = 50;
 
 	// render
 	render(cam, world);

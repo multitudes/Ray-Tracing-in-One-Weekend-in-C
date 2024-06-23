@@ -380,26 +380,38 @@ t_vec3 random_vec3_min_max(double min, double max)
 Then we need to figure out how to manipulate a random vector so that we only get results that are on the surface of a hemisphere, the side where we have our normal.  
 The book explains that we can generate a random vector in the unit cube and then check if it is inside the unit sphere. If it is not we discard it. This is called rejection sampling.
 
+## Shadow acne
+Do to floating points errors we ignore hits that are very close to the calculated intersection point. Due to these errors we can calculate a hit point that is just a bit below the surface of the object. This is called shadow acne. 
+To fix this we will add a small epsilon value to the t_min value in my ray_color function.
+```
+if ((world)->hit(world, r, interval(0.001, INFINITY), &rec))
+	{
+		t_vec3 direction = random_on_hemisphere(rec.normal);
+		t_ray scattered = ray(rec.p, direction);
+		return vec3multscalar(ray_color(&scattered, depth - 1, world), 0.5);
+	}
+```
+
+This is why we have intervals :)  
+
 The result is now gray and it takes quite a while to generate due to the recursive method in our ray_color function.  
 
 <div style="text-align: center;">
-<img src="assets/diffuse.png" alt="First Image" style="width: 45%;display: inline-block;" /> 
-<img src="assets/after.png" alt="Second Image" style="width: 45%;display: inline-block;" />
+<img src="assets/diffuse.png" alt="First Image" style="width: 45%;display: inline-block;" />
+<img src="assets/difnoacne.png" alt="Second Image" style="width: 45%;display: inline-block;" />
 </div>
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  
 - [Raytracing the rest of your life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html)  
-
 - stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.
 - [https://gabrielgambetta.com/computer-graphics-from-scratch/](https://gabrielgambetta.com/computer-graphics-from-scratch/)  
 - A raytracer on the back of a business card. [https://fabiensanglard.net/rayTracing_back_of_business_card/](https://fabiensanglard.net/rayTracing_back_of_business_card/)
 
-here are a few really good resources by [Fabien Sanglard](https://fabiensanglard.net/about/index.html):
+## here are a few really good resources by [Fabien Sanglard](https://fabiensanglard.net/about/index.html):
 
-scratchapixel.com : Great raytracer lessons written by professionals that have worked on Toy Story, Avatar, Lord of the Rings, Harry Potter, Pirates of the Caribbean and many other movies.
-An Introduction to Ray Tracing : An old book but a Classic.
-Physically Based Rendering : Heavy on maths but really good and well explained.
-
-- stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.  
+- scratchapixel.com : Great raytracer lessons written by professionals that have worked on Toy Story, Avatar, Lord of the Rings, Harry Potter, Pirates of the Caribbean and many other movies.  
+- An Introduction to Ray Tracing : An old book but a Classic.  
+- Physically Based Rendering : Heavy on maths but really good and well explained.  
