@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:49:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 13:28:32 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:17:55 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void write_color(FILE *file, t_color pixel_color)
 	double r = pixel_color.r;
 	double g = pixel_color.g;
 	double b = pixel_color.b;
+
+	// Gamma correction
+	r = linear_to_gamma(r);
+    g = linear_to_gamma(g);
+    b = linear_to_gamma(b);
 	
 	t_interval intensity = interval(0.0, 0.999); 
 	int rbyte = (int)(256 * clamp(intensity, r));

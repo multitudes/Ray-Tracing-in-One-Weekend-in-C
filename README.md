@@ -398,7 +398,7 @@ The result is now gray and it takes quite a while to generate due to the recursi
 
 <div style="text-align: center;">
 <img src="assets/diffuse.png" alt="First Image" style="width: 45%;display: inline-block;" />
-<img src="assets/difnoacne.png" alt="Second Image" style="width: 45%;display: inline-block;" />
+<img src="assets/noacne.png" alt="Second Image" style="width: 45%;display: inline-block;" />
 </div>
 
 ## Lambertian reflection
@@ -413,8 +413,19 @@ It is a small change in the ray_color function.
 ```
 It is not terribly visible but the image is a bit more realistic.
 <div style="text-align: center;">
-<img src="assets/difnoacne.png" alt="First Image" style="width: 45%;display: inline-block;" />
+<img src="assets/noacne.png" alt="First Image" style="width: 45%;display: inline-block;" />
 <img src="assets/lambertian.png" alt="Second Image" style="width: 45%;display: inline-block;" />
+</div>
+
+
+## Gamma correction
+The book explains that the human eye does not perceive light linearly. The eye is more sensitive to changes in darker colors than in lighter colors. This is why we need to apply gamma correction to our image.  
+We need to go from linear space to gamma space, which means taking the inverse of “gamma 2", which means an exponent of 1/gamma, which is just the square-root. 
+
+Not bad. The image is muc brighter now for .5 grey.
+<div style="text-align: center;">
+<img src="assets/lambertian.png" alt="First Image" style="width: 45%;display: inline-block;" />
+<img src="assets/gamma.png" alt="gamma" style="width: 45%;display: inline-block;" />
 </div>
 
 ## links
@@ -425,7 +436,7 @@ It is not terribly visible but the image is a bit more realistic.
 - [https://gabrielgambetta.com/computer-graphics-from-scratch/](https://gabrielgambetta.com/computer-graphics-from-scratch/)  
 - A raytracer on the back of a business card. [https://fabiensanglard.net/rayTracing_back_of_business_card/](https://fabiensanglard.net/rayTracing_back_of_business_card/)
 
-## here are a few really good resources by [Fabien Sanglard](https://fabiensanglard.net/about/index.html):
+## Here are a few really good resources by [Fabien Sanglard](https://fabiensanglard.net/about/index.html):
 
 - scratchapixel.com : Great raytracer lessons written by professionals that have worked on Toy Story, Avatar, Lord of the Rings, Harry Potter, Pirates of the Caribbean and many other movies.  
 - An Introduction to Ray Tracing : An old book but a Classic.  
