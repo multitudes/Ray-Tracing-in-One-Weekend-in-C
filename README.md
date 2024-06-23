@@ -401,6 +401,21 @@ The result is now gray and it takes quite a while to generate due to the recursi
 <img src="assets/difnoacne.png" alt="Second Image" style="width: 45%;display: inline-block;" />
 </div>
 
+## Lambertian reflection
+A reflected ray is most likely to scatter in a direction near the surface normal.
+This makes very much sense but I refer to the book for the explanation!
+It is a small change in the ray_color function. 
+```c
+// from 
+	t_vec3 direction = random_on_hemisphere(rec.normal);
+// to	
+	t_vec3 direction = vec3add(rec.normal, random_unit_vector());
+```
+It is not terribly visible but the image is a bit more realistic.
+<div style="text-align: center;">
+<img src="assets/difnoacne.png" alt="First Image" style="width: 45%;display: inline-block;" />
+<img src="assets/lambertian.png" alt="Second Image" style="width: 45%;display: inline-block;" />
+</div>
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
