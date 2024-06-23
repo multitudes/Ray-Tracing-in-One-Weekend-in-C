@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:52:12 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 12:55:09 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
-	t_camera c = camera();
-
 	// world
 	t_hittable *list[2];
 	t_sphere s1 = sphere(vec3(0, 0, -1), 0.5);
@@ -41,7 +39,7 @@ int main(int argc, char **argv)
 	const t_hittablelist world = hittablelist(list, 2);
 	
 	// render
-	render(c, world);
+	render(world);
 	// params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
 	// params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
 

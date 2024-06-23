@@ -21,9 +21,9 @@ t_vec3	vec3(double x, double y, double z)
 {
 	t_vec3 result;
 
-	result.p[0] = x;
-	result.p[1] = y;
-	result.p[2] = z;
+	result.x = x;
+	result.y = y;
+	result.z = z;
 	return result;
 }
 
@@ -31,9 +31,9 @@ t_point3	point3(double x, double y, double z)
 {
 	t_point3 result;
 
-	result.p[0] = x;
-	result.p[1] = y;
-	result.p[2] = z;
+	result.x = x;
+	result.y = y;
+	result.z = z;
 	return result;
 }
 
@@ -42,9 +42,9 @@ t_vec3	vec3negate(const t_vec3 a)
 {
 	t_vec3 result;
 
-	result.p[0] = -a.p[0];
-	result.p[1] = -a.p[1];
-	result.p[2] = -a.p[2];
+	result.x = -a.x;
+	result.y = -a.y;
+	result.z = -a.z;
 	return result;
 }
 
@@ -52,19 +52,19 @@ t_vec3	vec3add(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a.p[0] + b.p[0];
-	result.p[1] = a.p[1] + b.p[1];
-	result.p[2] = a.p[2] + b.p[2];
+	result.x = a.x + b.x;
+	result.y = a.y + b.y;
+	result.z = a.z + b.z;
 	return result;
 }
 
-t_vec3	vec3substr(const t_vec3 *a, const t_vec3 *b)
+t_vec3	vec3substr(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a->p[0] - b->p[0];
-	result.p[1] = a->p[1] - b->p[1];
-	result.p[2] = a->p[2] - b->p[2];
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
 	return result;
 }
 
@@ -72,9 +72,9 @@ t_vec3	vec3mult(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a.p[0] * b.p[0];
-	result.p[1] = a.p[1] * b.p[1];
-	result.p[2] = a.p[2] * b.p[2];
+	result.x = a.x * b.x;
+	result.y = a.y * b.y;
+	result.z = a.z * b.z;
 	return result;
 
 }
@@ -83,9 +83,9 @@ t_vec3	vec3multscalar(const t_vec3 a, double t)
 {
 	t_vec3 result;
 
-	result.p[0] = a.p[0] * t;
-	result.p[1] = a.p[1] * t;
-	result.p[2] = a.p[2] * t;
+	result.x = a.x * t;
+	result.y = a.y * t;
+	result.z = a.z * t;
 	return result;
 }
 
@@ -93,15 +93,15 @@ t_vec3	vec3divscalar(const t_vec3 a, double t)
 {
 	t_vec3 result;
 
-	result.p[0] = a.p[0] / t;
-	result.p[1] = a.p[1] / t;
-	result.p[2] = a.p[2] / t;
+	result.x = a.x / t;
+	result.y = a.y / t;
+	result.z = a.z / t;
 	return result;
 }
   
 double	length3_squared(const t_vec3 *v)
 {
-	return (v->p[0] * v->p[0] + v->p[1] * v->p[1] + v->p[2] * v->p[2]);
+	return (v->x * v->x + v->y * v->y + v->z * v->z);
 }
 
 double	length3(const t_vec3 *v)
@@ -115,7 +115,7 @@ double	length3(const t_vec3 *v)
  */
 void	print_vec3(const t_vec3 *v)
 {
-	printf("%f %f %f\n", v->p[0], v->p[1], v->p[2]);
+	printf("%f %f %f\n", v->x, v->y, v->z);
 }
 
 /*
@@ -125,9 +125,7 @@ double	dot(const t_vec3 a, const t_vec3 b)
 {
 	double result;
 
-	result = a.p[0] * b.p[0];
-	result += a.p[1] * b.p[1];
-	result += a.p[2] * b.p[2];
+	result = a.x * b.x + a.y * b.y + a.z * b.z;
 	return result;
 }
 
@@ -138,9 +136,9 @@ t_vec3	vec3cross(const t_vec3 a, const t_vec3 b)
 {
 	t_vec3 result;
 
-	result.p[0] = a.p[1] * b.p[2] - a.p[2] * b.p[1];
-	result.p[1] = a.p[2] * b.p[0] - a.p[0] * b.p[2];
-	result.p[2] = a.p[0] * b.p[1] - a.p[1] * b.p[0];
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
 	return result;
 }
 
@@ -152,9 +150,9 @@ t_vec3 unit_vector(t_vec3 v)
     double length;
 
 	length = length3(&v);
-    v.p[0] /= length;
-    v.p[1] /= length;
-    v.p[2] /= length;
+	v.x /= length;
+	v.y /= length;
+	v.z /= length;
 	return v;
 }
 

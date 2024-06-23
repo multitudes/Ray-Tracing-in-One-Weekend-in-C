@@ -259,7 +259,14 @@ t_hittablelist hittablelist(t_hittable **list, int size)
 
 ## Useful to have - An Interval type
 
-In C++ it is a class, in C it will be a struct.
+In C++ it is a class, in C it will be a struct. The interval type is useful to keep track of the t_min and t_max values. 
+```c
+typedef struct {
+	double t_min;
+	double t_max;
+} t_interval;
+```
+
 
 ## The Camera
 In C we do not have classes of course but we will still refactor the code in its own file with its struct and functions.
@@ -317,6 +324,15 @@ t_vec3 d = add(add(a, b), add(a, b));
 ```
 It is much nicer.
 
+## Antialiasing
+If we look at our zoomed image created until now we see that the edges are jagged like pixels on a staircase. To fix this we will take multiple samples per pixel and average the color. This is called antialiasing. In the book also there is an interesting note about the human eye and how it perceives color.
+> With a single ray through the center of each pixel, we are performing what is commonly called point sampling. The problem with point sampling can be illustrated by rendering a small checkerboard far away. If this checkerboard consists of an 8×8 grid of black and white tiles, but only four rays hit it, then all four rays might intersect only white tiles, or only black, or some odd combination. In the real world, when we perceive a checkerboard far away with our eyes, we perceive it as a gray color, instead of sharp points of black and white.
+
+We need to sample the light falling around the pixel, and integrate the changes.
+
+To do so we will create a random number generator to sample the colors around the pixel in a random way. 
+
+Here the C random number generator has been apparently superiour to the c++ one for quite some time. Interesting.
 
 
 ## Extras - the compile_commands.json file

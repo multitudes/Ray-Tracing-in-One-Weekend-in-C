@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:37:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:56:58 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 13:20:53 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ typedef struct	t_camera
     t_point3	pixel00_loc;    // Location of pixel 0, 0
     t_vec3		pixel_delta_u;  // Offset to pixel to the right
     t_vec3		pixel_delta_v;  // Offset to pixel below
+	int 		samples_per_pixel;
+	double		pixel_samples_scale;
 } 				t_camera;
 
 t_camera	camera();
-void		render(t_camera c, const t_hittablelist world);
+void		render(const t_hittablelist world);
 t_color		ray_color(t_ray *r, const t_hittablelist *world);
-
+t_ray		get_ray(t_camera *c, int u, int v);
+t_vec3		sample_square();
 #endif

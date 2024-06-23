@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:47:37 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:28:46 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 12:04:45 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdio.h>
 
 t_color		color(double r, double g, double b);
-void		write_color(FILE *file, t_color *pixel_color);
+void		write_color(FILE *file, t_color pixel_color);
 t_color 	creategradient(t_vec3 dir, t_color white, t_color blue);
 t_color		backgroundcolor(t_vec3 dir);
 

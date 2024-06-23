@@ -16,20 +16,26 @@
 
 typedef struct 	s_vec3
 {
-	double p[3];
+	union {
+        struct {
+            double x;
+            double y;
+            double z;
+        };
+        struct {
+            double r;
+            double g;
+            double b;
+        };
+	};
 }				t_vec3, t_color, t_point3;
 
 t_vec3		vec3(double x, double y, double z);
 t_point3	point3(double x, double y, double z);
 
-double	vec3x(const t_vec3 *v);
-double 	vec3y(const t_vec3 *v);
-double 	vec3z(const t_vec3 *v);
-
-
 t_vec3	vec3negate(const t_vec3 a);
 t_vec3	vec3add(const t_vec3 a, const t_vec3 b);
-t_vec3	vec3substr(const t_vec3 *a, const t_vec3 *b);
+t_vec3	vec3substr(const t_vec3 a, const t_vec3 b);
 t_vec3	vec3mult(const t_vec3 a, const t_vec3 b);
 t_vec3	vec3multscalar(const t_vec3 a, double t);
 t_vec3	vec3divscalar(const t_vec3 a, double t);

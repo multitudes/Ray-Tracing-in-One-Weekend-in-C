@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 09:53:54 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:18:56 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 11:57:46 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ inline t_interval empty_interval()
 inline t_interval universe_interval()
 {
 	return (t_interval){-INFINITY, INFINITY};
+}
+
+inline double	clamp(t_interval t, double x) 
+{
+	if (x < t.min) return t.min;
+	if (x > t.max) return t.max;
+	return x;
 }
 
 #endif

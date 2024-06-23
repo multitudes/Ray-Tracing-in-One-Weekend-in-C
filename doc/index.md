@@ -88,7 +88,7 @@ In code:
 ```c
 bool hit_sphere(const t_sphere *s, const t_ray *r) 
 {
-    t_vec3 cq = vec3substr(&(s->center), &(r->orig));
+    t_vec3 cq = vec3substr(s->center, r->orig);
     double a = dot(&(r->dir), &(r->dir));
     double b = -2.0 * dot(&(r->dir), &cq);
     double c = dot(&cq, &cq) - s->radius * s->radius;

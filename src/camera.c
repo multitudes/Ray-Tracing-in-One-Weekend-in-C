@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:41:23 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 13:33:57 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "hittable.h"
 #include "hittable_list.h"
 #include <limits.h>
-
+#include "rtweekend.h"
 #include <stdio.h>
 
 /*
@@ -35,6 +35,8 @@ t_camera camera()
 {
 	t_camera c;
 
+	c.samples_per_pixel = 10;
+	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 	c.aspect_ratio = (double)16.0 / 9.0;
 	c.image_width = 400;
 	c.image_height = (double)c.image_width / c.aspect_ratio;
@@ -61,8 +63,10 @@ t_camera camera()
 }
 
 
-void	render(t_camera c, const t_hittablelist world)
+void	render(const t_hittablelist world)
 {
+	t_camera c = camera();
+
 	// render
 	// for the book course we create a ppm image
 	// create_ppm_image("test.ppm", WIDTH, HEIGHT);
@@ -81,13 +85,13 @@ void	render(t_camera c, const t_hittablelist world)
 		// fprintf(stderr, "\rScanlines remaining: %d\n", image_height - j);
 		for (int i = 0; i < c.image_width; i++)
 		{	
-			t_point3 deltas = vec3(c.pixel_delta_u.p[0] * i, c.pixel_delta_v.p[1] * j, 0.0);
-			const t_point3 pixel_center = vec3add(c.pixel00_loc, deltas);
-			t_ray r = ray(c.center, pixel_center);
-			t_color pixel_color = ray_color(&r, &world);
-			// print_vec3(&pixel_color);
-			// t_color pixel_color = vec3((float)i / (image_width - 1), (float)j / (image_height - 1), 0.0);
-			write_color(file, &pixel_color);
+			t_color pixel_color = color(0,0,0);
+            for (int sample = 0; sample < c.samples_per_pixel; sample++) {
+                    t_ray r = get_ray(&c, i, j);
+					t_color partial = ray_color(&r, &world);
+                    pixel_color = vec3add(pixel_color, partial);
+                }
+			write_color(file, vec3multscalar(pixel_color, c.pixel_samples_scale));
 		}
 	}
 	fclose(file);
@@ -105,10 +109,32 @@ t_color	ray_color(t_ray *r, const t_hittablelist *world)
 		return raycolor;
 	}
 	r->dir = unit_vector(r->dir);
-	double a = 0.5 * (r->dir.p[1] + 1.0);
+	double a = 0.5 * (r->dir.y + 1.0);
 	t_color start = vec3multscalar(color(1.0, 1.0, 1.0), 1.0 - a);
 	t_color end = vec3multscalar(color(0.5, 0.7, 1.0), a);
 	raycolor = vec3add(start, end);
 	return raycolor;
+}
+
+t_ray get_ray(t_camera *c, int i, int j)  
+{
+	// Construct a camera ray originating from the origin and directed at randomly sampled
+	// point around the pixel location i, j.
+
+	t_vec3	offset = sample_square();
+	t_vec3	pixel_sample = vec3add(c->pixel00_loc, 
+						vec3add(vec3multscalar(c->pixel_delta_u, (i + offset.x)),
+								vec3multscalar(c->pixel_delta_v, (j + offset.y))));
+
+	t_vec3 ray_origin = c->center;
+	t_vec3 ray_direction = vec3substr(pixel_sample, ray_origin);
+
+	return ray(ray_origin, ray_direction);
+}
+
+t_vec3	sample_square()
+{
+	// Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
+	return vec3(random_d() - 0.5, random_d() - 0.5, 0);
 }
 

@@ -6,22 +6,23 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:49:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 11:29:00 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 13:28:32 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "color.h"
 #include <stdio.h>
 #include <limits.h>
+#include "interval.h"
 
 
 t_color color(double r, double g, double b)
 {
 	t_color result;
 
-	result.p[0] = r;
-	result.p[1] = g;
-	result.p[2] = b;
+	result.r = r;
+	result.g = g;
+	result.b = b;
 	return result;
 }
 
@@ -29,14 +30,23 @@ t_color color(double r, double g, double b)
 write a pixel to a file
 the format is PPM and this function is called from create_ppm_image
 */
-void write_color(FILE *file, t_color *pixel_color)
+void write_color(FILE *file, t_color pixel_color)
 {
-	fprintf(file, "%d %d %d\n", (int)(255.999 * pixel_color->p[0]), (int)(255.999 * pixel_color->p[1]), (int)(255.999 * pixel_color->p[2]));
+	// Write the translated [0,255] value of each color component
+	double r = pixel_color.r;
+	double g = pixel_color.g;
+	double b = pixel_color.b;
+	
+	t_interval intensity = interval(0.0, 0.999); 
+	int rbyte = (int)(256 * clamp(intensity, r));
+	int gbyte = (int)(256 * clamp(intensity, g));
+	int bbyte = (int)(256 * clamp(intensity, b));
+	fprintf(file, "%d %d %d\n", rbyte, gbyte, bbyte);
 }
 
 t_color creategradient(t_vec3 dir, t_color white, t_color blue)
 {
-	double a = 0.5 * (dir.p[1] + 1.0);
+	double a = 0.5 * (dir.y + 1.0);
 	t_color white_scaled = vec3multscalar(white, 1.0 - a);
 	t_color blue_scaled = vec3multscalar(blue, a);
 	t_color raycolor = vec3add(white_scaled, blue_scaled);
