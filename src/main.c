@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 14:51:29 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:42:37 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@
 #include <limits.h>
 #include <string.h>
 #include "utils.h"
-
-#include "sphere.h"
 #include "hittable.h"
+#include "sphere.h"
+#include "camera.h"
+#include "color.h"
+#include "ray.h"
+#include "vec3.h"
+#include "material.h"
 #include "hittable_list.h"
 #include "interval.h"
 #include <float.h>

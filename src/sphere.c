@@ -6,16 +6,16 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 14:28:25 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:40:06 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sphere.h"
-#include "ray.h"
+#include <stddef.h>
 #include <stdbool.h>
 #include <math.h>
+#include "sphere.h"
+#include "ray.h"
 #include "vec3.h"
-#include "hittable.h"
 
 /*
  * a sort of initializer for a sphere
@@ -24,9 +24,11 @@ t_sphere sphere(t_point3 center, double radius)
 {
 	t_sphere s;
 
+  // TODO: Initialize the material pointer `mat`.
 	s.base.hit = hit_sphere;
 	s.center = center;
 	s.radius = radius;
+	s.mat = NULL;
 	return s;
 }
 
@@ -50,7 +52,7 @@ bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record
     double h = dot(r->dir, oc);
 	double c = length3_squared(oc) - s->radius * s->radius;
     double discriminant = h*h - a*c;
-
+	rec->mat = s->mat;
 	if (discriminant < 0)
 		return (false);
 	double sqrtd = sqrt(discriminant);

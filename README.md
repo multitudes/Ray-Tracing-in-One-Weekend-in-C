@@ -104,7 +104,7 @@ Ex For a sphere, the outward normal is in the direction of the hit point minus t
 ## Which side of the sphere are we on?
 We need to choose to determine the side of the surface at the time of geometry intersection or at the time of coloring.
 This is a boolean determined with the dot product
-```
+```c
 bool front_face;
 if (dot(ray_direction, outward_normal) > 0.0) {
     // ray is inside the sphere
@@ -196,7 +196,6 @@ t_sphere s2 = sphere(vec3(0, -100.5, -1), 100);
 list[0] = (t_hittable*)(&s1);
 list[1] = (t_hittable*)(&s2);
 const t_hittablelist world = hittablelist(list, 2);
-
 ```
 
 This already works and I get the second sphere creating a nice background.
@@ -224,7 +223,7 @@ typedef struct 	s_hittablelist {
 
 And so we have a hit function on world that will loop through the list of hittables and call their hit functions.
 
-```
+```c
 bool hit(const void *self, const t_ray* r, double ray_tmin, double ray_tmax, t_hit_record* rec)
 {
 	 	t_hittablelist *hittablelist = (t_hittablelist *)self;
@@ -281,7 +280,7 @@ The render() method will prepare the camera for rendering and then execute the r
 ## Passing by value or by reference?
 In C++ we have references which are variables that can be passed around without copying. In C we have pointers. But pointers bring a problem. 
 If I declare the sum like
-```
+```c
 t_vec3 add(t_vec3 *a, t_vec3 *b)
 {
 	t_vec3 sum;
@@ -292,21 +291,21 @@ t_vec3 add(t_vec3 *a, t_vec3 *b)
 }
 ```
 Then if using the add functions for two vectors I have to pass pointers then I cannot use the add function with the result of another add function. Like this is working but I have to create a temp extra var c:
-```
+```c
 t_vec3 a = vec3(1, 2, 3);
 t_vec3 b = vec3(4, 5, 6);
 t_vec3 c = add(&a, &b);
 t_vec3 d = add(&c, &c);
 ```
 This will not work because the add function expects pointers and I cannot in C take the pointer of a rvalue return value . So I will have to use the add function like this:
-```	
+```c
 t_vec3 a = vec3(1, 2, 3);
 t_vec3 b = vec3(4, 5, 6);
 t_vec3 c = vec3(&add(&a, &b), &add(&a, &b));
 ```
 
 With small structs there is a very small performance hit when passing by value. So I will pass by value and this allows to chain functions and have better readable code.
-```
+```c
 t_vec3 add(t_vec3 a, t_vec3 b)
 {
 	t_vec3 sum;
@@ -317,7 +316,7 @@ t_vec3 add(t_vec3 a, t_vec3 b)
 }
 ```
 now:
-```
+```c
 t_vec3 a = vec3(1, 2, 3);	
 t_vec3 b = vec3(4, 5, 6);
 t_vec3 d = add(add(a, b), add(a, b));
@@ -383,7 +382,7 @@ The book explains that we can generate a random vector in the unit cube and then
 ## Shadow acne
 Do to floating points errors we ignore hits that are very close to the calculated intersection point. Due to these errors we can calculate a hit point that is just a bit below the surface of the object. This is called shadow acne. 
 To fix this we will add a small epsilon value to the t_min value in my ray_color function.
-```
+```c
 if ((world)->hit(world, r, interval(0.001, INFINITY), &rec))
 	{
 		t_vec3 direction = random_on_hemisphere(rec.normal);
@@ -427,6 +426,13 @@ Not bad. The image is muc brighter now for .5 grey.
 <img src="assets/lambertian.png" alt="First Image" style="width: 45%;display: inline-block;" />
 <img src="assets/gamma.png" alt="gamma" style="width: 45%;display: inline-block;" />
 </div>
+
+## Metal
+We gonna start a new material struct data type. 
+
+## Albedo
+the term albedo (Latin for “whiteness”) is used to describe the fraction of incident light that is reflected by a surface.
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
