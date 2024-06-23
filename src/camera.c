@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 13:33:57 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/23 13:40:26 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,8 @@ t_camera camera()
 }
 
 
-void	render(const t_hittablelist world)
+void	render(t_camera c, const t_hittablelist world)
 {
-	t_camera c = camera();
-
 	// render
 	// for the book course we create a ppm image
 	// create_ppm_image("test.ppm", WIDTH, HEIGHT);
