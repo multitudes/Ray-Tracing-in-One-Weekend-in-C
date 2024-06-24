@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:37:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 14:52:02 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 15:49:46 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct	t_camera
 	int 		samples_per_pixel;
 	double		pixel_samples_scale;
 	int			max_depth;		   // Maximum number of ray bounces into scene
+	double		vfov;			   // Field of view
 } 				t_camera;
 
 t_camera	camera();

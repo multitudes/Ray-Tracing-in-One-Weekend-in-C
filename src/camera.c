@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 11:44:50 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 16:41:36 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,15 @@ t_camera camera()
 	c.image_height = (double)c.image_width / c.aspect_ratio;
 	c.image_height = (c.image_height < 1) ? 1 : c.image_height;
 	c.center = vec3(0, 0, 0);
+	c.vfov = 90;
+	
  	double focal_length = 1.0;
-	double viewport_height = 2.0;
+	
+	double theta = degrees_to_radians(c.vfov);
+    double h = tan(theta/2);
+    double viewport_height = 2 * h * focal_length;
 	double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
+	
 	// printf("viewport_width: %f and height %f\n", viewport_width, viewport_height);
 	t_vec3 translation = vec3(-viewport_width / 2, viewport_height / 2, -focal_length);
     t_point3 viewport_upper_left = vec3add(c.center, translation);

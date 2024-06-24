@@ -627,8 +627,40 @@ ok I will try this. Air bubble in water!
 <img src="assets/air_in_water.png" alt="Air bubble in water" style="width: 70%;display: inline-block;" />
 </div>
 
+## hollow glass sphere
+This is a sphere of some thickness with another sphere of air inside it.  
+We will create two spheres, one for the glass and one for the air bubble:
+
+```c
+	t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&dielectric_material_left);
+	t_sphere s4 = sphere(point3(1.0, 0.0, -1.0), 0.4, (t_material*)&dielectric_material_bubble);
+```
+The result is a hollow glass sphere.
+
+<div style="text-align: center;">
+<img src="assets/hollow_glass.png" alt="Hollow glass sphere" style="width: 70%;display: inline-block;" />
+</div>
+
+
 ## Christophe Schlick Approximation
 This is because real glass has reflectivity that varies with angle but I did not see any difference so far in the picture being generated. It is probably included for completeness or my world has not enough details right now.
+
+## Positionable Camera
+### field of view fov
+It is typically expressed as an angle (in degrees or radians) and determines how wide or narrow the view captured by the camera is. A larger FOV allows the camera to capture a wider area of the scene, making objects appear smaller and further apart.  In the book we will use vertical field of view by convension since the horizontal fov will be determined by the aspect ratio of the image.
+Now I can express the viewport in function of the vertical field of view and the focal_length.
+```c
+	double theta = degrees_to_radians(c.vfov);
+    double h = tan(theta/2);
+    double viewport_height = 2 * h * focal_length;
+	double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
+```
+
+Testing now with 2 touching spheres, using a 90° field of view:
+
+<div style="text-align: center;">
+<img src="assets/fov.png" alt="Field of view" style="width: 70%;display: inline-block;" />
+</div>
 
 
 ## links
