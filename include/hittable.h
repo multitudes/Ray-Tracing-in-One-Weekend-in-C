@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 16:59:14 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 15:47:32 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 10:57:07 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
+#include "material.h"
 #include "ray.h"
 #include <stdbool.h>
 #include "interval.h"
-#include "material.h"
+
+typedef struct s_material t_material;
 
 typedef struct 	s_hit_record {
 	t_material 	*mat;

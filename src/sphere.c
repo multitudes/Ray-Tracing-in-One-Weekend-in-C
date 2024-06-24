@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:52:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 15:40:06 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 10:51:38 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ bool hit_sphere(const void *self, const t_ray *r, t_interval ray_t, t_hit_record
 	t_vec3 inters_minus_center = vec3substr(rec->p, s->center);
 	rec->normal = vec3divscalar(inters_minus_center, s->radius);
 	set_face_normal(rec, r, rec->normal);
+	rec->mat = s->mat;
 
 	return (true);
 }
@@ -78,3 +79,4 @@ void set_face_normal(t_hit_record *rec, const t_ray *r, const t_vec3 outward_nor
 	rec->front_face = dot(r->dir, outward_normal) < 0;
 	rec->normal = rec->front_face ? outward_normal : vec3negate(outward_normal);
 }
+

@@ -428,10 +428,76 @@ Not bad. The image is muc brighter now for .5 grey.
 </div>
 
 ## Metal
-We gonna start a new material struct data type. 
+The material needs to do two things:
+
+	- Produce a scattered ray (or say it absorbed the incident ray).
+    - If scattered, say how much the ray should be attenuated.
+
+In C++ it is an abstract class. In C I will use a struct with a function pointer to a hit function. 
+
+```c
+typedef struct s_material {
+	bool (*scatter)(const void* self, const t_ray* r_in, const t_hit_record* rec, t_vec3* attenuation, t_ray* scattered);
+} t_material;
+```
+We are going to put a pointer to a material in our hit record.  
+Also, hit_record needs to be told the material that is assigned to the sphere.  Our sphere struct will have a material pointer.  
+ 
 
 ## Albedo
-the term albedo (Latin for “whiteness”) is used to describe the fraction of incident light that is reflected by a surface.
+The term albedo (Latin for “whiteness”) is used to describe the fraction of incident light that is reflected by a surface. It is used to define some form of fractional reflectance. Albedo will vary with material color.  
+We will implement Lambertian (diffuse) reflectance first. This is the simplest form of reflection.  
+
+How to impement this in C where in C++ we would have a virtual function?
+Objects like my sphere will have pointers to a `t_material` struct and this `t_material` struct is also included in the `t_hit_record`:
+
+- I will define a `material` struct with a function pointer for the `scatter` function. This function determines how materials interact with rays.
+
+- In `hit_record` include a pointer to the `material` of the object hit.
+
+- Objects (e.g., spheres) include a pointer to the `t_material` struct, 
+
+- Implement functions for different materials. These functions should match the signature of the `scatter` function pointer in the `material` struct.
+
+- When creating objects, assign a material to them by setting the material pointer to point to an instance of a `material` struct configured with the appropriate scatter function.
+
+- When a ray hits an object, the `t_hit_record` will be populated with information about the hit, including the material of the object. The ray tracing logic can then use the `scatter` function through the `t_hit_record`'s material pointer to determine the color and direction of the scattered ray.
+
+But since I have different materials with different properties I will create a struct for each material with their unique properties. Ex the lambertian material has albedo. The Base in the struct is the material pointer and then I have the specific properties. I can pass this struct to the scatter function since it expects a material pointer and I have this in the base struct. 
+
+ex:
+```c
+// Example of creating a lambertian material
+t_lambertian lambertian_material;
+
+// Function to initialize a Lambertian material
+void lambertian_init(t_lambertian *lambertian_material, t_color albedo) 
+{
+    lambertian_material->base.scatter = lambertian_scatter; // Assign the scatter function
+    lambertian_material->albedo = albedo; // Set the albedo
+}
+
+bool lambertian_scatter(void* self, const t_ray *r_in, const t_hit_record *rec, t_color *attenuation, t_ray *scattered) 
+{
+	(void)r_in;
+	t_lambertian *lamb = (t_lambertian *)self;
+	t_vec3 scatter_direction = vec3add(rec->normal, random_unit_vector());
+    *scattered = ray(rec->p, scatter_direction);
+    *attenuation = lamb->albedo;
+        return true;
+    return true; 
+}
+```
+
+Lambertian surfaces scatter all incoming light uniformly in all directions, but the amount of light scattered is proportional to the surface's albedo.
+
+In the `scatter` function of the `lambertian` class, the `albedo` is used to set the `attenuation` of the scattered ray. The `attenuation` represents how much the ray's intensity is reduced upon scattering. For a Lambertian material, this attenuation is simply the albedo of the material, indicating that the color of the scattered light is influenced by the color of the material itself.
+
+Here's a breakdown of the process:  
+
+- Scatter Direction:  new direction for the scattered ray is calculated by adding a random unit vector to the hit normal. This simulates diffuse reflection, where light is scattered in many directions.
+- Attenuation: The `attenuation` parameter is set to the material's `albedo`. This means the scattered light's color is influenced by the material's color, simulating how real-world surfaces absorb some wavelengths of light more than others, thereby coloring the light that is reflected.
+- Scattered Ray: The `scattered` ray is created with its origin at the point of intersection (`rec.p`) and its direction set to the calculated scatter direction. This ray represents the path of the light after it has interacted with the material.
 
 
 ## links
@@ -447,3 +513,4 @@ the term albedo (Latin for “whiteness”) is used to describe the fraction of 
 - scratchapixel.com : Great raytracer lessons written by professionals that have worked on Toy Story, Avatar, Lord of the Rings, Harry Potter, Pirates of the Caribbean and many other movies.  
 - An Introduction to Ray Tracing : An old book but a Classic.  
 - Physically Based Rendering : Heavy on maths but really good and well explained.  
+
