@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 12:02:35 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 12:55:48 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,22 @@ int main(int argc, char **argv)
 	// world
 	t_lambertian lambertian_material_ground;
 	t_lambertian lambertian_material_center;
-	t_metal metal_material_left;
+	// t_metal metal_material_left;
+	t_dielectric dielectric_material_left;
 	t_metal metal_material_right;
 
    	lambertian_init(&lambertian_material_ground, color(0.8, 0.8, 0.0));
 	lambertian_init(&lambertian_material_center, color(0.1, 0.2, 0.5));
-    metal_init(&metal_material_left, color(0.8, 0.8, 0.8), 0.3);
+    // metal_init(&metal_material_left, color(0.8, 0.8, 0.8), 0.3);
+	dielectric_init(&dielectric_material_left, 1.5);
 	metal_init(&metal_material_right, color(0.8, 0.6, 0.2), 1.0);
 
 	// Assuming t_lambertian and t_metal have a t_material as their first member,
 	// you can safely cast their addresses to t_material*.
 	t_sphere s1 = sphere(point3(0.0, -100.5, -1.0), 100.0, (t_material*)&lambertian_material_ground);
 	t_sphere s2 = sphere(point3(0.0, 0.0, -1.2), 0.5, (t_material*)&lambertian_material_center);
-	t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_left);
+	// t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_left);
+	t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&dielectric_material_left);
 	t_sphere s4 = sphere(point3(1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_right);
 
 

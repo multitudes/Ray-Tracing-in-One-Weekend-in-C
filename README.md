@@ -549,6 +549,24 @@ The result is breathtaking. It works! This is the power of math!
 
 </div>
 
+## Fuzziness
+We can also randomize the reflected direction by using a small sphere and choosing a new endpoint for the ray. We'll use a random point from the surface of a sphere centered on the original endpoint, scaled by the fuzz factor. The bigger the fuzz sphere, the fuzzier the reflections will be. This suggests adding a fuzziness parameter that is just the radius of the sphere (so zero is no perturbation). Also, we need to normalize the reflected ray. 
+
+## Dielectrics
+Clear materials such as water, glass, and diamond are dielectrics.
+When a light ray hits them, it splits into a reflected ray and a refracted (transmitted) ray.  
+ a reflected ray hits a surface and then “bounces” off in a new direction.
+
+A refracted ray bends as it transitions from a material's surroundings into the material itself (as with glass or water). This is why a pencil looks bent when partially inserted in water. 
+
+The amount that a refracted ray bends is determined by the material's refractive index. Generally, this is a single value that describes how much light bends when entering a material from a vacuum. Glass has a refractive index of something like 1.5–1.7, diamond is around 2.4, and air has a small refractive index of 1.000293. 
+
+Imagine to render a glass ball under water, then the glass ball would have an effective refractive index of 1.125. This is given by the refractive index of glass (1.5) divided by the refractive index of water (1.333).  
+
+again this is the result:
+<div style="text-align: center;">
+<img src="assets/glass.png" alt="Dielectrics" style="width: 70%;display: inline-block;" />
+
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  

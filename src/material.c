@@ -6,11 +6,35 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 15:43:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 11:39:26 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 12:53:04 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "material.h"
+
+// Example of creating a lambertian material
+// t_lambertian lambertian_material;
+
+// Function to initialize a Lambertian material
+void lambertian_init(t_lambertian *lambertian_material, t_color albedo) 
+{
+    lambertian_material->base.scatter = lambertian_scatter; // Assign the scatter function
+    lambertian_material->albedo = albedo; // Set the albedo
+}
+
+void metal_init(t_metal *metal, t_color albedo, double fuzz)
+{
+	metal->base.scatter = metal_scatter;
+	metal->albedo = albedo;
+	metal->fuzz = fuzz < 1 ? fuzz : 1;
+}
+
+
+void dielectric_init(t_dielectric *dielectric, double refraction_index)
+{
+	dielectric->base.scatter = dielectric_scatter;
+	dielectric->refraction_index = refraction_index;
+}
 
 /*
  * scatter function for a lambertian material
@@ -28,29 +52,31 @@ bool lambertian_scatter(void* self, const t_ray *r_in, const t_hit_record *rec, 
     return true; 
 }
 
-// Example of creating a lambertian material
-// t_lambertian lambertian_material;
-
-// Function to initialize a Lambertian material
-void lambertian_init(t_lambertian *lambertian_material, t_color albedo) 
-{
-    lambertian_material->base.scatter = lambertian_scatter; // Assign the scatter function
-    lambertian_material->albedo = albedo; // Set the albedo
-}
-
+/*
+ * scatter function for a metal material
+ */
 bool metal_scatter(void *self, const t_ray* r_in, const t_hit_record *rec, t_color *attenuation, t_ray *scattered)
 {
 	t_metal *metal = (t_metal *)self;
-	// t_vec3 reflected = reflect(unit_vector(r_in->dir), rec->normal);
 	t_vec3 reflected = reflect(r_in->dir, rec->normal);
+	reflected = unit_vector(vec3add(reflected, vec3multscalar(random_unit_vector(), metal->fuzz)));
 	*scattered = ray(rec->p, reflected);
 	*attenuation = metal->albedo;
-	return true;
+	return (dot(scattered->dir, rec->normal) > 0);
 }
 
-void metal_init(t_metal *metal, t_color albedo, double fuzz)
+/*
+ * scatter function for a dielectric material
+ */
+bool dielectric_scatter(void *self, const t_ray* r_in, const t_hit_record *rec, t_color *attenuation, t_ray *scattered)
 {
-	metal->base.scatter = metal_scatter;
-	metal->albedo = albedo;
-	metal->fuzz = fuzz < 1 ? fuzz : 1;
+	t_dielectric *dielectric = (t_dielectric *)self;
+	*attenuation = color(1.0, 1.0, 1.0);
+	double ri = rec->front_face ? (1.0 / dielectric->refraction_index) : dielectric->refraction_index;
+
+	t_vec3 unit_direction = unit_vector(r_in->dir);
+	t_vec3 refracted = refract(unit_direction, rec->normal, ri);
+
+	*scattered = ray(rec->p, refracted);
+	return true;
 }

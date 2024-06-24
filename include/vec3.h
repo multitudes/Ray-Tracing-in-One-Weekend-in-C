@@ -15,6 +15,7 @@
 # define VECTOR_H
 
 #include <stdbool.h>
+#include <math.h>
 
 typedef struct 	s_vec3
 {
@@ -35,21 +36,21 @@ typedef struct 	s_vec3
 t_vec3		vec3(double x, double y, double z);
 t_point3	point3(double x, double y, double z);
 
-t_vec3	vec3negate(const t_vec3 a);
-t_vec3	vec3add(const t_vec3 a, const t_vec3 b);
-t_vec3	vec3substr(const t_vec3 a, const t_vec3 b);
-t_vec3	vec3mult(const t_vec3 a, const t_vec3 b);
-t_vec3	vec3multscalar(const t_vec3 a, double t);
-t_vec3	vec3divscalar(const t_vec3 a, double t);
-  
-double	length3_squared(const t_vec3 v);
-double	length3(const t_vec3 v);
-void	print_vec3(const t_vec3 *v);
-double	dot(const t_vec3 a, const t_vec3 b);
-t_vec3	vec3cross(const t_vec3 a, const t_vec3 b);
-t_vec3	random_vec3();
-t_vec3	random_vec3_min_max(double min, double max);
-bool near_zero(t_vec3 e); 
+t_vec3		vec3negate(const t_vec3 a);
+t_vec3		vec3add(const t_vec3 a, const t_vec3 b);
+t_vec3		vec3substr(const t_vec3 a, const t_vec3 b);
+t_vec3		vec3mult(const t_vec3 a, const t_vec3 b);
+t_vec3		vec3multscalar(const t_vec3 a, double t);
+t_vec3		vec3divscalar(const t_vec3 a, double t);
+	
+double		length_squared(const t_vec3 v);
+double		length3(const t_vec3 v);
+void		print_vec3(const t_vec3 *v);
+double		dot(const t_vec3 a, const t_vec3 b);
+t_vec3		vec3cross(const t_vec3 a, const t_vec3 b);
+t_vec3		random_vec3();
+t_vec3		random_vec3_min_max(double min, double max);
+bool 		near_zero(t_vec3 e); 
 
 inline t_vec3 unit_vector(t_vec3 v)
 {
@@ -63,7 +64,7 @@ inline t_vec3 random_in_unit_sphere()
 {
     while (1) {
         t_vec3 p = random_vec3_min_max(-1,1);
-        if (length3_squared(p) < 1)
+        if (length_squared(p) < 1)
             return p;
     }
 }
@@ -95,5 +96,19 @@ inline t_vec3	reflect(const t_vec3 v, const t_vec3 n)
     return vec3substr(v, vec3multscalar(n, dot(v, n) * 2));
 }
 
+/*
+ * Refract function
+ * params: uv, n, etai_over_etat
+ * uv: unit vector of the ray
+ * n: normal of the surface
+ * etai_over_etat: ratio of the refractive indices
+ */
+inline t_vec3 refract(const t_vec3 uv, const t_vec3 n, double etai_over_etat) 
+{
+    double cos_theta = fmin(dot(vec3negate(uv), n), 1.0);
+    t_vec3 r_out_perp =  vec3multscalar(vec3add(uv, vec3multscalar(n, cos_theta)), etai_over_etat);
+    t_vec3 r_out_parallel = vec3multscalar(n, -sqrt(fabs(1.0 - length_squared(r_out_perp))));
+    return vec3add(r_out_perp, r_out_parallel);
+}
 
 #endif
