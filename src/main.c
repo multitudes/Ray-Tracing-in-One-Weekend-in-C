@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 15:42:37 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 12:02:35 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,31 @@ int main(int argc, char **argv)
 	(void)argv;
 
 	// world
-	t_hittable *list[2];
-	t_sphere s1 = sphere(vec3(0, 0, -1), 0.5);
-	t_sphere s2 = sphere(vec3(0, -100.5, -1), 100);
+	t_lambertian lambertian_material_ground;
+	t_lambertian lambertian_material_center;
+	t_metal metal_material_left;
+	t_metal metal_material_right;
+
+   	lambertian_init(&lambertian_material_ground, color(0.8, 0.8, 0.0));
+	lambertian_init(&lambertian_material_center, color(0.1, 0.2, 0.5));
+    metal_init(&metal_material_left, color(0.8, 0.8, 0.8), 0.3);
+	metal_init(&metal_material_right, color(0.8, 0.6, 0.2), 1.0);
+
+	// Assuming t_lambertian and t_metal have a t_material as their first member,
+	// you can safely cast their addresses to t_material*.
+	t_sphere s1 = sphere(point3(0.0, -100.5, -1.0), 100.0, (t_material*)&lambertian_material_ground);
+	t_sphere s2 = sphere(point3(0.0, 0.0, -1.2), 0.5, (t_material*)&lambertian_material_center);
+	t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_left);
+	t_sphere s4 = sphere(point3(1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_right);
+
+
+	t_hittable *list[4];
+
 	list[0] = (t_hittable*)(&s1);
 	list[1] = (t_hittable*)(&s2);
-	const t_hittablelist world = hittablelist(list, 2);
+	list[2] = (t_hittable*)(&s3);
+	list[3] = (t_hittable*)(&s4);
+	const t_hittablelist world = hittablelist(list, 4);
 	
 	// init camera
 

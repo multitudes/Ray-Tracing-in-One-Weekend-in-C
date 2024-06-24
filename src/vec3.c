@@ -13,6 +13,7 @@
 #include "vec3.h"
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 #include "rtweekend.h"
 
 /*
@@ -151,4 +152,11 @@ t_vec3 random_vec3()
 t_vec3 random_vec3_min_max(double min, double max) 
 {
     return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+}
+
+bool near_zero(t_vec3 e) 
+{
+	// Return true if the vector is close to zero in all dimensions.
+	const double s = 1e-8;
+	return (fabs(e.x) < s) && (fabs(e.y) < s) && (fabs(e.z) < s);
 }

@@ -499,6 +499,55 @@ Here's a breakdown of the process:
 - Attenuation: The `attenuation` parameter is set to the material's `albedo`. This means the scattered light's color is influenced by the material's color, simulating how real-world surfaces absorb some wavelengths of light more than others, thereby coloring the light that is reflected.
 - Scattered Ray: The `scattered` ray is created with its origin at the point of intersection (`rec.p`) and its direction set to the calculated scatter direction. This ray represents the path of the light after it has interacted with the material.
 
+## Metals
+For polished metals the ray won’t be randomly scattered. 
+Follow the book for the math explanation but for metals and polished surface we need to calculate the reflection of the ray.
+The reflection of a ray is calculated by reflecting the ray direction across the surface normal. This is done by subtracting the ray direction from the normal twice. 
+```c
+inline t_vec3	vec3reflect(const t_vec3 v, const t_vec3 n) 
+{
+    return vec3substr(v, vec3multscalar(n, dot(v, n) * 2));
+}
+```
+
+## reflections and refractions
+Since I am not using C++ I cannot use the abstract class approach and my code is slightly more convoluted. In main at this stage I need to initialize my spheres 
+in this way:
+```c
+	t_lambertian lambertian_material_ground;
+	t_lambertian lambertian_material_center;
+	t_metal metal_material_left;
+	t_metal metal_material_right;
+
+   	lambertian_init(&lambertian_material_ground, color(0.8, 0.8, 0.0));
+	lambertian_init(&lambertian_material_center, color(0.1, 0.2, 0.5));
+    metal_init(&metal_material_left, color(0.8, 0.8, 0.8), 0.3);
+	metal_init(&metal_material_right, color(0.8, 0.6, 0.2), 1.0);
+
+	// Assuming t_lambertian and t_metal have a t_material as their first member,
+	// you can safely cast their addresses to t_material*.
+	t_sphere s1 = sphere(point3(0.0, -100.5, -1.0), 100.0, (t_material*)&lambertian_material_ground);
+	t_sphere s2 = sphere(point3(0.0, 0.0, -1.2), 0.5, (t_material*)&lambertian_material_center);
+	t_sphere s3 = sphere(point3(-1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_left);
+	t_sphere s4 = sphere(point3(1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_right);
+
+
+	t_hittable *list[4];
+
+	list[0] = (t_hittable*)(&s1);
+	list[1] = (t_hittable*)(&s2);
+	list[2] = (t_hittable*)(&s3);
+	list[3] = (t_hittable*)(&s4);
+
+	//world!
+	const t_hittablelist world = hittablelist(list, 4);
+```
+The result is breathtaking. It works! This is the power of math!
+
+<div style="text-align: center;">
+<img src="assets/refractions.png" alt="Refractions" style="width: 70%;display: inline-block;" />
+
+</div>
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

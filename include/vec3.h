@@ -14,6 +14,8 @@
 #ifndef VECTOR_H
 # define VECTOR_H
 
+#include <stdbool.h>
+
 typedef struct 	s_vec3
 {
 	union {
@@ -42,16 +44,12 @@ t_vec3	vec3divscalar(const t_vec3 a, double t);
   
 double	length3_squared(const t_vec3 v);
 double	length3(const t_vec3 v);
-
-// Vector Utility Functions
-
 void	print_vec3(const t_vec3 *v);
-
 double	dot(const t_vec3 a, const t_vec3 b);
 t_vec3	vec3cross(const t_vec3 a, const t_vec3 b);
-
 t_vec3	random_vec3();
 t_vec3	random_vec3_min_max(double min, double max);
+bool near_zero(t_vec3 e); 
 
 inline t_vec3 unit_vector(t_vec3 v)
 {
@@ -90,6 +88,11 @@ inline t_vec3 random_on_hemisphere(const t_vec3 normal)
         return on_unit_sphere;
     else
         return vec3negate(on_unit_sphere);
+}
+
+inline t_vec3	reflect(const t_vec3 v, const t_vec3 n) 
+{
+    return vec3substr(v, vec3multscalar(n, dot(v, n) * 2));
 }
 
 
