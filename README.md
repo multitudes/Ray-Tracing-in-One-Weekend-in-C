@@ -563,9 +563,69 @@ The amount that a refracted ray bends is determined by the material's refractive
 
 Imagine to render a glass ball under water, then the glass ball would have an effective refractive index of 1.125. This is given by the refractive index of glass (1.5) divided by the refractive index of water (1.333).  
 
-again this is the result:
+Look in the book for Snell’s law and the Fresnel equations.
+```c
+/*
+ * Refract function
+ * params: uv, n, etai_over_etat
+ * uv: unit vector of the ray
+ * n: normal of the surface
+ * etai_over_etat: ratio of the refractive indices
+ */
+inline t_vec3 refract(const t_vec3 uv, const t_vec3 n, double etai_over_etat) 
+{
+    double cos_theta = fmin(dot(vec3negate(uv), n), 1.0);
+    t_vec3 r_out_perp =  vec3multscalar(vec3add(uv, vec3multscalar(n, cos_theta)), etai_over_etat);
+    t_vec3 r_out_parallel = vec3multscalar(n, -sqrt(fabs(1.0 - length_squared(r_out_perp))));
+    return vec3add(r_out_perp, r_out_parallel);
+}
+```
+again this is the result with snell's law implemented.:
+
 <div style="text-align: center;">
 <img src="assets/glass.png" alt="Dielectrics" style="width: 70%;display: inline-block;" />
+</div>
+
+This is not all however, sice there is a critical angle at which the refracted ray is parallel to the surface. This is called total internal reflection. 
+For this we update the scatter function to take this into account. 
+
+ 
+```c
+bool dielectric_scatter(void *self, const t_ray* r_in, const t_hit_record *rec, t_color *attenuation, t_ray *scattered)
+{
+	t_dielectric *dielectric = (t_dielectric *)self;
+	*attenuation = color(1.0, 1.0, 1.0);
+	double ri = rec->front_face ? (1.0 / dielectric->refraction_index) : dielectric->refraction_index;
+	t_vec3 unit_direction = unit_vector(r_in->dir);
+	
+	double cos_theta = fmin(dot(vec3negate(unit_direction), rec->normal), 1.0);
+	double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+	bool cannot_refract = ri * sin_theta > 1.0;
+	t_vec3 direction;
+
+	if (cannot_refract)
+		direction = reflect(unit_direction, rec->normal);
+	else
+		direction = refract(unit_direction, rec->normal, ri);
+
+	*scattered = ray(rec->p, direction);
+
+	return true;
+}
+```
+
+we compile and there is no difference! Lets see the tutorial...
+
+>Well, it turns out that given a sphere of material with an index of refraction greater than air, there's no incident angle that will yield total internal reflection — neither at the ray-sphere entrance point nor at the ray exit. This is due to the geometry of spheres, as a grazing incoming ray will always be bent to a smaller angle, and then bent back to the original angle on exit.
+So how can we illustrate total internal reflection? Well, if the sphere has an index of refraction less than the medium it's in, then we can hit it with shallow grazing angles, getting total external reflection. That should be good enough to observe the effect.
+We'll model a world filled with water (index of refraction approximately 1.33), and change the sphere material to air (index of refraction 1.00) — an air bubble! To do this, change the left sphere material's index of refraction to
+index of refraction of air/index of refraction of water
+
+ok I will try this. Air bubble in water!
+<div style="text-align: center;">
+<img src="assets/air_in_water.png" alt="Air bubble in water" style="width: 70%;display: inline-block;" />
+</div>
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

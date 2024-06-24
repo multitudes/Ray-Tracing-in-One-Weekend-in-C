@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 12:55:48 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:17:06 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
    	lambertian_init(&lambertian_material_ground, color(0.8, 0.8, 0.0));
 	lambertian_init(&lambertian_material_center, color(0.1, 0.2, 0.5));
     // metal_init(&metal_material_left, color(0.8, 0.8, 0.8), 0.3);
-	dielectric_init(&dielectric_material_left, 1.5);
+	dielectric_init(&dielectric_material_left, 1.00 / 1.33);
 	metal_init(&metal_material_right, color(0.8, 0.6, 0.2), 1.0);
 
 	// Assuming t_lambertian and t_metal have a t_material as their first member,

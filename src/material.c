@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 15:43:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 12:53:04 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:15:57 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,20 @@ bool dielectric_scatter(void *self, const t_ray* r_in, const t_hit_record *rec, 
 	t_dielectric *dielectric = (t_dielectric *)self;
 	*attenuation = color(1.0, 1.0, 1.0);
 	double ri = rec->front_face ? (1.0 / dielectric->refraction_index) : dielectric->refraction_index;
-
 	t_vec3 unit_direction = unit_vector(r_in->dir);
-	t_vec3 refracted = refract(unit_direction, rec->normal, ri);
+	
+	double cos_theta = fmin(dot(vec3negate(unit_direction), rec->normal), 1.0);
+	double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
-	*scattered = ray(rec->p, refracted);
+	bool cannot_refract = ri * sin_theta > 1.0;
+	t_vec3 direction;
+
+	if (cannot_refract)
+		direction = reflect(unit_direction, rec->normal);
+	else
+		direction = refract(unit_direction, rec->normal, ri);
+
+	*scattered = ray(rec->p, direction);
+
 	return true;
 }
