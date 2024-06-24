@@ -44,7 +44,7 @@ t_vec3		vec3multscalar(const t_vec3 a, double t);
 t_vec3		vec3divscalar(const t_vec3 a, double t);
 	
 double		length_squared(const t_vec3 v);
-double		length3(const t_vec3 v);
+double		length(const t_vec3 v);
 void		print_vec3(const t_vec3 *v);
 double		dot(const t_vec3 a, const t_vec3 b);
 t_vec3		vec3cross(const t_vec3 a, const t_vec3 b);
@@ -54,7 +54,7 @@ bool 		near_zero(t_vec3 e);
 
 inline t_vec3 unit_vector(t_vec3 v)
 {
-	return vec3divscalar(v, length3(v));
+	return vec3divscalar(v, length(v));
 }
 
 /*
@@ -114,12 +114,12 @@ inline t_vec3 refract(const t_vec3 uv, const t_vec3 n, double etai_over_etat)
 /*
  * Schlick's approximation for reflectance
  */
-// static double reflectance(double cosine, double refraction_index) {
-// 	// Use Schlick's approximation for reflectance.
-// 	double r0 = (1 - refraction_index) / (1 + refraction_index);
-// 	r0 = r0*r0;
-// 	return r0 + (1-r0)*pow((1 - cosine),5);
-// }
+inline double reflectance(double cosine, double refraction_index) {
+	// Use Schlick's approximation for reflectance.
+	double r0 = (1 - refraction_index) / (1 + refraction_index);
+	r0 = r0*r0;
+	return r0 + (1-r0)*pow((1 - cosine),5);
+}
 
 
 #endif

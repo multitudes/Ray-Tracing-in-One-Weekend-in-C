@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 16:41:36 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:25:35 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,42 @@ t_camera camera()
 	c.image_width = 400;
 	c.image_height = (double)c.image_width / c.aspect_ratio;
 	c.image_height = (c.image_height < 1) ? 1 : c.image_height;
-	c.center = vec3(0, 0, 0);
+
 	c.vfov = 90;
 	
- 	double focal_length = 1.0;
+    c.lookfrom = point3(0,0,0);   // Point camera is looking from
+    c.lookat   = point3(0,0,-1);  // Point camera is looking at
+    c.vup      = vec3(0,1,0);     // Camera-relative "up" direction
+
+	c.center = c.lookfrom;
+	
+	double focal_length = length(vec3substr(c.lookfrom, c.lookat));
 	
 	double theta = degrees_to_radians(c.vfov);
     double h = tan(theta/2);
     double viewport_height = 2 * h * focal_length;
 	double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
 	
-	// printf("viewport_width: %f and height %f\n", viewport_width, viewport_height);
-	t_vec3 translation = vec3(-viewport_width / 2, viewport_height / 2, -focal_length);
-    t_point3 viewport_upper_left = vec3add(c.center, translation);
-	c.pixel_delta_u = vec3(viewport_width / c.image_width, 0.0, 0.0);
-	c.pixel_delta_v = vec3(0.0, -viewport_height / c.image_height, 0.0);
-	t_vec3 small_translation = vec3(0.5 * viewport_width / c.image_width, \
-									- 0.5 * viewport_height / c.image_height, \
-									0.0);
+	// Calculate the u,v,w unit basis vectors for the camera coordinate frame.
+    c.w = unit_vector(vec3substr(c.lookfrom, c.lookat));
+    c.u = unit_vector(vec3cross(c.vup, c.w));
+    c.v = vec3cross(c.w, c.u);
+
+	// Calculate the vectors across the horizontal and down the vertical viewport edges.
+    t_vec3 viewport_u = vec3multscalar(c.u, viewport_width);    // Vector across viewport horizontal edge
+	t_vec3 viewport_v = vec3multscalar(vec3negate(c.v), viewport_height);  // Vector down viewport vertical edge
+
+	 // Calculate the horizontal and vertical delta vectors from pixel to pixel.
+    c.pixel_delta_u  = vec3divscalar(viewport_u, c.image_width);
+    c.pixel_delta_v = vec3divscalar(viewport_v, c.image_height);
+
+	
+    t_point3 viewport_upper_left = vec3substr(c.center, vec3multscalar(c.w, focal_length));
+	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_u, 2));
+	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_v, 2));
+	
+	t_vec3 small_translation = vec3add(vec3multscalar(c.pixel_delta_u, 0.5), vec3multscalar(c.pixel_delta_v, 0.5));
+
     c.pixel00_loc = vec3add(viewport_upper_left, small_translation);
 	printf("pixel00_loc: ");
 	print_vec3(&c.pixel00_loc);

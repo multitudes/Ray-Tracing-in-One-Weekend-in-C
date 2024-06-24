@@ -662,6 +662,12 @@ Testing now with 2 touching spheres, using a 90° field of view:
 <img src="assets/fov.png" alt="Field of view" style="width: 70%;display: inline-block;" />
 </div>
 
+## Positionable Camera
+We can rotate the camera around its normal axis. We need a way to specify the up. and the look from and look at. 
+The tutorial uses the common convention of naming this the “view up” (vup) vector.
+```c
+
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

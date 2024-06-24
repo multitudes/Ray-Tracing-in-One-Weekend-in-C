@@ -106,7 +106,7 @@ double	length_squared(const t_vec3 v)
 	return (v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-double	length3(const t_vec3 v)
+double	length(const t_vec3 v)
 {
 	return (sqrt(length_squared(v)));
 }
