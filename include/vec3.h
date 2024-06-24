@@ -111,4 +111,15 @@ inline t_vec3 refract(const t_vec3 uv, const t_vec3 n, double etai_over_etat)
     return vec3add(r_out_perp, r_out_parallel);
 }
 
+/*
+ * Schlick's approximation for reflectance
+ */
+static double reflectance(double cosine, double refraction_index) {
+	// Use Schlick's approximation for reflectance.
+	double r0 = (1 - refraction_index) / (1 + refraction_index);
+	r0 = r0*r0;
+	return r0 + (1-r0)*pow((1 - cosine),5);
+}
+
+
 #endif

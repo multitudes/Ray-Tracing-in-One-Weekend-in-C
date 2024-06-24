@@ -627,6 +627,10 @@ ok I will try this. Air bubble in water!
 <img src="assets/air_in_water.png" alt="Air bubble in water" style="width: 70%;display: inline-block;" />
 </div>
 
+## Christophe Schlick Approximation
+This is because real glass has reflectivity that varies with angle but I did not see any difference so far in the picture being generated. It is probably included for completeness or my world has not enough details right now.
+
+
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  

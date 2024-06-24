@@ -6,11 +6,12 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 15:43:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 13:15:57 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:26:43 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "material.h"
+#include "rtweekend.h"
 
 // Example of creating a lambertian material
 // t_lambertian lambertian_material;
@@ -81,7 +82,7 @@ bool dielectric_scatter(void *self, const t_ray* r_in, const t_hit_record *rec, 
 	bool cannot_refract = ri * sin_theta > 1.0;
 	t_vec3 direction;
 
-	if (cannot_refract)
+	if (cannot_refract || reflectance(cos_theta, ri) > random_d())
 		direction = reflect(unit_direction, rec->normal);
 	else
 		direction = refract(unit_direction, rec->normal, ri);
