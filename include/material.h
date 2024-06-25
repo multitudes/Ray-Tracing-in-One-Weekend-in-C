@@ -13,9 +13,7 @@
 #ifndef MATERIAL_H
 # define MATERIAL_H
 
-#include "hittable.h"
 #include "ray.h"
-#include "color.h"
 #include <stdbool.h>
 
 //forward declaration

@@ -843,6 +843,7 @@ I will revert to use the stack for spheres and materials. It is a waste of space
 
 It is incredibly faster now, I can literally see the image being generated. With the malloc version I had to wait for minutes. Lesson learned!
 
+This is the last image at full resolution.
 
 <div style="text-align: center;">
 <img src="assets/final2.png" alt="final" style="width: 70%;display: inline-block;" />

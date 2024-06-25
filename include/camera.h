@@ -16,7 +16,6 @@
 #include "vec3.h"
 #include "ray.h"
 #include "hittable_list.h"
-#include "color.h"
 
 
 typedef struct	t_camera 
