@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:37:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 16:59:22 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 07:52:49 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ typedef struct	t_camera
 {
 	// considered "public" 
 	double 		aspect_ratio;
+	int 		image_width;
+	int 		samples_per_pixel;
+	int			max_depth;		   // Maximum number of ray bounces into scene
 	double		vfov;			   // Field of view
 	t_point3 	lookfrom;   		// Point camera is looking from
     t_point3 	lookat;  			// Point camera is looking at
     t_vec3   	vup;     			// Camera-relative "up" direction
-	int 		image_width;
-	int 		samples_per_pixel;
-	int			max_depth;		   // Maximum number of ray bounces into scene
 	
 	// considered private
 	int    		image_height;   // Rendered image height

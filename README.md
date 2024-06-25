@@ -668,6 +668,17 @@ The tutorial uses the common convention of naming this the “view up” (vup) v
 ```c
 
 
+```
+
+Now we have a camera that can be positioned and rotated.
+
+<div style="text-align: center;">
+<img src="assets/faraway.png" alt="Camera" style="width: 70%;display: inline-block;" />
+</div>
+
+## Defocus Blur
+
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

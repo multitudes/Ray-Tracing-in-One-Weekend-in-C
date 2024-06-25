@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 17:25:35 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 07:59:11 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,18 @@ t_camera camera()
 {
 	t_camera c;
 	
-	c.max_depth = 10;
-	c.samples_per_pixel = 10;
-	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 	c.aspect_ratio = (double)16.0 / 9.0;
 	c.image_width = 400;
 	c.image_height = (double)c.image_width / c.aspect_ratio;
 	c.image_height = (c.image_height < 1) ? 1 : c.image_height;
 
+	c.max_depth         = 50;
+    c.samples_per_pixel = 100;
+	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
+
 	c.vfov = 90;
 	
-    c.lookfrom = point3(0,0,0);   // Point camera is looking from
+    c.lookfrom = point3(-2,2,1);   // Point camera is looking from
     c.lookat   = point3(0,0,-1);  // Point camera is looking at
     c.vup      = vec3(0,1,0);     // Camera-relative "up" direction
 

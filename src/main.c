@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 18:54:49 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 07:57:04 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,11 @@ int main(int argc, char **argv)
 	
 	// init camera
 
-    t_camera cam = camera();
+    t_camera c = camera();
 
-    cam.aspect_ratio      = 16.0 / 9.0;
-    cam.image_width       = 400;
-    cam.samples_per_pixel = 100;
-	cam.pixel_samples_scale = 1.0 / cam.samples_per_pixel;
-	cam.max_depth         = 50;
-	cam.vfov     = 90;
-	cam.lookfrom = point3(-2,2,1);
-    cam.lookat   = point3(0,0,-1);
-    cam.vup      = vec3(0,1,0);
-	
+
 	// render
-	render(cam, world);
+	render(c, world);
 	// params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);
 	// params.img = mlx_new_image(params.mlx, WIDTH, HEIGHT);
 
