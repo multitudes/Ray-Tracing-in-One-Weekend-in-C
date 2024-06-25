@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 08:30:06 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 09:14:26 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,27 @@ t_camera camera()
 {
 	t_camera c;
 	
-	c.aspect_ratio = (double)16.0 / 9.0;
-	c.image_width = 400;
+	// public members
+	c.aspect_ratio = (double)16.0 / 9.0; 	// Ratio of image width over height
+	c.image_width = 400; 					// Rendered image width in pixel count
+    c.samples_per_pixel = 100;				// Count of random samples for each pixel
+	c.max_depth = 50;						// Maximum number of ray bounces into scene
+	
+	c.vfov = 20; 							// Vertical view angle (field of view)
+    c.lookfrom = point3(-2,2,1);			// Point camera is looking from
+    c.lookat = point3(0,0,-1);				// Point camera is looking at
+    c.vup = vec3(0,1,0);					// Camera-relative "up" direction
+	
+    c.defocus_angle = 10; 					// Variation angle of rays through each pixel
+    c.focus_dist = 3.4;						// Distance from camera lookfrom point to plane of perfect focus
+
+	// initialize the camera from public members
 	c.image_height = (double)c.image_width / c.aspect_ratio;
 	c.image_height = (c.image_height < 1) ? 1 : c.image_height;
-
-	c.max_depth         = 50;
-    c.samples_per_pixel = 100;
+  	
 	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 
-	c.vfov = 20;
-	c.defocus_angle = 0;  // Variation angle of rays through each pixel
-    c.focus_dist = 10;    // Distance from camera lookfrom point to plane of perfect focus
-	
-    c.lookfrom = point3(-2,2,1);   // Point camera is looking from
-    c.lookat   = point3(0,0,-1);  // Point camera is looking at
-    c.vup      = vec3(0,1,0);     // Camera-relative "up" direction
-
 	c.center = c.lookfrom;
-	
-	// double focal_length = length(vec3substr(c.lookfrom, c.lookat));
 	
 	double theta = degrees_to_radians(c.vfov);
     double h = tan(theta/2);
@@ -66,8 +67,6 @@ t_camera camera()
     c.u = unit_vector(vec3cross(c.vup, c.w));
     c.v = vec3cross(c.w, c.u);
 
-
-
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
     t_vec3 viewport_u = vec3multscalar(c.u, viewport_width);    // Vector across viewport horizontal edge
 	t_vec3 viewport_v = vec3multscalar(vec3negate(c.v), viewport_height);  // Vector down viewport vertical edge
@@ -76,7 +75,6 @@ t_camera camera()
     c.pixel_delta_u  = vec3divscalar(viewport_u, c.image_width);
     c.pixel_delta_v = vec3divscalar(viewport_v, c.image_height);
 
-	
     t_point3 viewport_upper_left = vec3substr(c.center, vec3multscalar(c.w, c.focus_dist));
 	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_u, 2));
 	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_v, 2));
@@ -85,18 +83,15 @@ t_camera camera()
 
     c.pixel00_loc = vec3add(viewport_upper_left, small_translation);
 
-
-		// Calculate the camera defocus disk basis vectors.
+	// Calculate the camera defocus disk basis vectors.
 	double defocus_radius = c.focus_dist * tan(degrees_to_radians(c.defocus_angle / 2));
-	c.defocus_disk_u = vec3multscalar(c.u * defocus_radius);
-	c.defocus_disk_v = vec3multscalar(c.v * defocus_radius);
+	c.defocus_disk_u = vec3multscalar(c.u, defocus_radius);
+	c.defocus_disk_v = vec3multscalar(c.v, defocus_radius);
 
 	printf("pixel00_loc: ");
 	print_vec3(&c.pixel00_loc);
 
 	return c;
-
-
 }
 
 
@@ -156,25 +151,48 @@ t_color	ray_color(t_ray *r, const int depth, const t_hittablelist *world)
 	return vec3add(start, end);
 }
 
+/*
+ * get_ray
+ * 
+ * c: camera
+ * i: x coordinate
+ * j: y coordinate
+ * 
+ * returns: a camera ray originating from the defocus disk and directed at a randomly 
+ * sampled point around the pixel location i, j.
+ */
 t_ray get_ray(t_camera *c, int i, int j)  
 {
-	// Construct a camera ray originating from the origin and directed at randomly sampled
-	// point around the pixel location i, j.
-
 	t_vec3	offset = sample_square();
 	t_vec3	pixel_sample = vec3add(c->pixel00_loc, 
 						vec3add(vec3multscalar(c->pixel_delta_u, (i + offset.x)),
-								vec3multscalar(c->pixel_delta_v, (j + offset.y))));
+						vec3multscalar(c->pixel_delta_v, (j + offset.y))));
 
-	t_vec3 ray_origin = c->center;
+	t_vec3 ray_origin = (c->defocus_angle <= 0) ? c->center : defocus_disk_sample(c);
 	t_vec3 ray_direction = vec3substr(pixel_sample, ray_origin);
 
 	return ray(ray_origin, ray_direction);
 }
 
+/*
+ * sample_square
+ * 
+ * Returns a random point in the unit square.
+ */
 t_vec3	sample_square()
 {
-	// Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
 	return vec3(random_d() - 0.5, random_d() - 0.5, 0);
 }
+
+/*
+ * defocus_disk_sample
+ * 
+ * Returns a random point in the camera defocus disk.
+ */
+t_point3 defocus_disk_sample(t_camera *c)
+{
+	t_point3 p = random_in_unit_disk();
+	return vec3add(vec3add(c->center, vec3multscalar(c->defocus_disk_u, p.x)), vec3multscalar(c->defocus_disk_v, p.y));
+}
+
 

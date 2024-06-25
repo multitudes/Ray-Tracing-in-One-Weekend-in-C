@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:34:23 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/24 13:26:18 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 08:32:41 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <math.h>
 #include <limits.h>
 #include <stdlib.h>
-
-
 
 #define PI 3.1415926535897932385
 

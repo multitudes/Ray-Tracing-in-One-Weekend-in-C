@@ -16,6 +16,7 @@
 
 #include <stdbool.h>
 #include <math.h>
+#include "rtweekend.h"
 
 typedef struct 	s_vec3
 {
@@ -55,6 +56,19 @@ bool 		near_zero(t_vec3 e);
 inline t_vec3 unit_vector(t_vec3 v)
 {
 	return vec3divscalar(v, length(v));
+}
+
+/*
+ * Random vector in unit disk
+ */
+inline t_vec3 random_in_unit_disk() 
+{
+    while (1) 
+	{
+        t_vec3 p = vec3(random_double(-1,1), random_double(-1,1), 0);
+        if (length_squared(p) < 1)
+            return p;
+    }
 }
 
 /*
@@ -119,19 +133,6 @@ inline double reflectance(double cosine, double refraction_index) {
 	double r0 = (1 - refraction_index) / (1 + refraction_index);
 	r0 = r0*r0;
 	return r0 + (1-r0)*pow((1 - cosine),5);
-}
-
-/*
- * Random vector in unit disk
- */
-inline t_vec3 random_in_unit_disk() 
-{
-    while (1) 
-	{
-        t_vec3 p = vec3(random_double(-1,1), random_double(-1,1), 0);
-        if (length_squared(p) < 1)
-            return p;
-    }
 }
 
 #endif

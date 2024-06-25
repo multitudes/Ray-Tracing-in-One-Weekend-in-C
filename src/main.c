@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 07:57:04 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 09:12:14 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int main(int argc, char **argv)
 	// list[1] = (t_hittable*)(&s2);
 	// const t_hittablelist world = hittablelist(list, 2);
 	
-
 	t_lambertian lambertian_material_ground;
 	t_lambertian lambertian_material_center;
 	// t_metal metal_material_left;
@@ -78,7 +77,6 @@ int main(int argc, char **argv)
 	t_sphere s4 = sphere(point3(-1.0, 0.0, -1.0), 0.4, (t_material*)&dielectric_material_bubble);
 	t_sphere s5 = sphere(point3(1.0, 0.0, -1.0), 0.5, (t_material*)&metal_material_right);
 
-
 	t_hittable *list[5];
 
 	list[0] = (t_hittable*)(&s1);
@@ -92,7 +90,7 @@ int main(int argc, char **argv)
 
     t_camera c = camera();
 
-
+	printf("camera init done ================ ");
 	// render
 	render(c, world);
 	// params.mlx = mlx_init(WIDTH, HEIGHT, "in a weekend!", true);

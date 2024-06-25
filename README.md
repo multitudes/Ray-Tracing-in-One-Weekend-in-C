@@ -704,6 +704,14 @@ Now the viewport is dependent of the focus distance.
 double theta = degrees_to_radians(c.vfov);
 double h = tan(theta/2);
 double viewport_height = 2 * h * c.focus_dist;
+..
+```
+
+We get the following result:
+<div style="text-align: center;">
+<img src="assets/depth.png" alt="defocus" style="width: 70%;display: inline-block;" />
+</div>
+
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

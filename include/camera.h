@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:37:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 08:25:16 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 08:39:32 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ void		render(t_camera cam, const t_hittablelist world);
 t_color		ray_color(t_ray *r, int max_deph, const t_hittablelist *world);
 t_ray		get_ray(t_camera *c, int u, int v);
 t_vec3		sample_square();
+t_point3	defocus_disk_sample(t_camera *c);
 
 #endif
