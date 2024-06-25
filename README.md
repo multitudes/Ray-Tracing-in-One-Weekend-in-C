@@ -665,12 +665,18 @@ Testing now with 2 touching spheres, using a 90° field of view:
 ## Positionable Camera
 We can rotate the camera around its normal axis. We need a way to specify the up. and the look from and look at. 
 The tutorial uses the common convention of naming this the “view up” (vup) vector.
+We will make the viewport height dependent from the vertical field of view and the aspect ratio. 
 ```c
+	cam.vfov = 90;
+	cam.lookfrom = point3(-2,2,1);   // Point camera is looking from
+    cam.lookat   = point3(0,0,-1);  // Point camera is looking at
+    cam.vup      = vec3(0,1,0);     // Camera-relative "up" direction
 
-
+	double theta = degrees_to_radians(cam.vfov);
+    double h = tan(theta/2);
+    double viewport_height = 2 * h * focal_length;
+	double viewport_width = viewport_height * ((double)cam.image_width/cam.image_height);
 ```
-
-Now we have a camera that can be positioned and rotated.
 
 <div style="text-align: center;">
 <img src="assets/faraway.png" alt="Camera" style="width: 70%;display: inline-block;" />
