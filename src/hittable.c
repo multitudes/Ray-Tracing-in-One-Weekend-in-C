@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 10:49:28 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 10:15:21 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 11:40:39 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ bool hit(const void *self, const t_ray* r, t_interval ray_t, t_hit_record* rec)
 		double closest_so_far = ray_t.max;
 		int i = 0;
 
+		if (!self)
+			return (false);
 		while (i < hittablelist->size)
 		{
-			if (hittablelist->list[i]->hit(hittablelist->list[i], r, interval(ray_t.min, closest_so_far), &temp_rec))
+			if (hittablelist->list[i] && hittablelist->list[i]->hit(hittablelist->list[i], r, interval(ray_t.min, closest_so_far), &temp_rec))
 			{
 				hit_anything = true;
 				closest_so_far = temp_rec.t;

@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:49:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/23 15:17:55 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 12:18:40 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,20 @@ t_color	backgroundcolor(t_vec3 dir)
 	dir = unit_vector(dir);
 	raycolor = creategradient(dir, white, blue);
 	return raycolor;
+}
+
+/*
+ * Generate a random color
+ */
+t_color		color_random()
+{
+	return color(random_double(0, 1), random_double(0, 1), random_double(0, 1));
+}
+
+/*
+ * Generate a random color with components between min and max
+ */
+t_color		color_random_min_max(double min, double max)
+{
+	return color(random_double(min, max), random_double(min, max), random_double(min, max));
 }

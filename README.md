@@ -754,6 +754,101 @@ And the result is:
 <img src="assets/final.png" alt="final" style="width: 70%;display: inline-block;" />
 </div>
 
+For the smaller spheres the book uses a for loop. Until now I used the stack exclusively, but creating a sphere in the loop will make me lose the pointer to the struct. I end up with a segmentation fault, my pointers are dangling! The solution is use malloc and I tried this:
+```c
+ 	for (int a = 0; a < 22; a++) 
+	{
+        for (int b = 0; b < 22; b++) 
+		{
+            double choose_mat = random_d();
+            t_point3 center = point3((double)a + 0.9 * random_d(), 0.2, (double)b + 0.9*random_d());
+            if (length(vec3substr(center, point3(4, 0.2, 0))) > 0.9) 
+			{
+                if (choose_mat < 0.8) 
+				{
+                    // diffuse
+					t_lambertian *sphere_material = malloc(sizeof(t_lambertian));
+                    t_color *albedo = malloc(sizeof(t_color)); 
+					*albedo = vec3cross(color_random(), color_random());
+                    lambertian_init(sphere_material, *albedo);
+					t_sphere *s = malloc(sizeof(t_sphere)); 
+					*s = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)sphere_material);
+					list[i] = (t_hittable*)(s);
+                } 
+				else if (choose_mat < 0.95) {
+	                //     // metal
+			        t_color *albedo = malloc(sizeof(t_color)); 
+					*albedo = color_random_min_max(0.5,1);
+                	double fuzz = random_double(0, 0.5);
+					t_metal *sphere_material = malloc(sizeof(t_metal));
+					metal_init(sphere_material, *albedo, fuzz);
+					t_sphere *s = malloc(sizeof(t_sphere));
+					*s = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)sphere_material);
+					list[i] = (t_hittable*)(s);
+                } 
+				else 
+				{
+                	     // glass
+					t_dielectric *sphere_material = malloc(sizeof(t_dielectric));
+					dielectric_init(sphere_material, 1.5);
+					t_sphere *s = malloc(sizeof(t_sphere));
+					*s = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)sphere_material);
+					list[i] = (t_hittable*)(s);
+				}
+            }
+			else
+				list[i] = NULL;
+			i++;
+        }
+    }
+```
+
+This is working. However, I cannot free a material if I dont know if it has albedo or not. I ussed a trick to get polimorphism in C and now there is no way I get to know what struct I had originally unless I introduce a new property in my material class. And this just to free the memory?
+There is aLso another problem. The memory allocation makes my program suuuper slow. It hurts.
+I will revert to use the stack for spheres and materials. It is a waste of space but it is fine for this implementation:
+
+```c
+	t_lambertian sphere_materials_lambertian[22*22];
+	t_metal sphere_materials_metal[22*22];
+	t_dielectric sphere_materials_dielectric[22*22];
+	t_sphere spheres[22*22];
+
+	...
+	// in the loop
+	if (choose_mat < 0.8) 
+	{
+		// diffuse
+		t_color albedo = vec3cross(color_random(), color_random());
+		lambertian_init(&sphere_materials_lambertian[i], albedo);
+		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_lambertian[i]);
+		list[i] = (t_hittable*)&spheres[i];
+	} 
+	else if (choose_mat < 0.95) 
+	{
+		// metal
+		t_color albedo = color_random_min_max(0.5,1);
+		double fuzz = random_double(0, 0.5);
+		metal_init(&sphere_materials_metal[i], albedo, fuzz);
+		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_metal[i]);
+		list[i] = (t_hittable*)&spheres[i];
+	} 
+	else 
+	{
+		// glass
+		dielectric_init(&sphere_materials_dielectric[i], 1.5);
+		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_dielectric[i]);
+		list[i] = (t_hittable*)&spheres[i];
+	}
+```
+
+It is incredibly faster now, I can literally see the image being generated. With the malloc version I had to wait for minutes. Lesson learned!
+
+
+<div style="text-align: center;">
+<img src="assets/final2.png" alt="final" style="width: 70%;display: inline-block;" />
+</div>
+
+
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  
