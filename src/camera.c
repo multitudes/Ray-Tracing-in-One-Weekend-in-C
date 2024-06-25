@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 08:09:31 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 08:30:06 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ t_camera camera()
 	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 
 	c.vfov = 20;
+	c.defocus_angle = 0;  // Variation angle of rays through each pixel
+    c.focus_dist = 10;    // Distance from camera lookfrom point to plane of perfect focus
 	
     c.lookfrom = point3(-2,2,1);   // Point camera is looking from
     c.lookat   = point3(0,0,-1);  // Point camera is looking at
@@ -52,17 +54,19 @@ t_camera camera()
 
 	c.center = c.lookfrom;
 	
-	double focal_length = length(vec3substr(c.lookfrom, c.lookat));
+	// double focal_length = length(vec3substr(c.lookfrom, c.lookat));
 	
 	double theta = degrees_to_radians(c.vfov);
     double h = tan(theta/2);
-    double viewport_height = 2 * h * focal_length;
+    double viewport_height = 2 * h * c.focus_dist;
 	double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
 	
 	// Calculate the u,v,w unit basis vectors for the camera coordinate frame.
     c.w = unit_vector(vec3substr(c.lookfrom, c.lookat));
     c.u = unit_vector(vec3cross(c.vup, c.w));
     c.v = vec3cross(c.w, c.u);
+
+
 
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
     t_vec3 viewport_u = vec3multscalar(c.u, viewport_width);    // Vector across viewport horizontal edge
@@ -73,13 +77,20 @@ t_camera camera()
     c.pixel_delta_v = vec3divscalar(viewport_v, c.image_height);
 
 	
-    t_point3 viewport_upper_left = vec3substr(c.center, vec3multscalar(c.w, focal_length));
+    t_point3 viewport_upper_left = vec3substr(c.center, vec3multscalar(c.w, c.focus_dist));
 	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_u, 2));
 	viewport_upper_left = vec3substr(viewport_upper_left, vec3divscalar(viewport_v, 2));
 	
 	t_vec3 small_translation = vec3add(vec3multscalar(c.pixel_delta_u, 0.5), vec3multscalar(c.pixel_delta_v, 0.5));
 
     c.pixel00_loc = vec3add(viewport_upper_left, small_translation);
+
+
+		// Calculate the camera defocus disk basis vectors.
+	double defocus_radius = c.focus_dist * tan(degrees_to_radians(c.defocus_angle / 2));
+	c.defocus_disk_u = vec3multscalar(c.u * defocus_radius);
+	c.defocus_disk_v = vec3multscalar(c.v * defocus_radius);
+
 	printf("pixel00_loc: ");
 	print_vec3(&c.pixel00_loc);
 

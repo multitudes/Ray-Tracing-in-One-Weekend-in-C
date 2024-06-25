@@ -650,10 +650,10 @@ This is because real glass has reflectivity that varies with angle but I did not
 It is typically expressed as an angle (in degrees or radians) and determines how wide or narrow the view captured by the camera is. A larger FOV allows the camera to capture a wider area of the scene, making objects appear smaller and further apart.  In the book we will use vertical field of view by convension since the horizontal fov will be determined by the aspect ratio of the image.
 Now I can express the viewport in function of the vertical field of view and the focal_length.
 ```c
-	double theta = degrees_to_radians(c.vfov);
-    double h = tan(theta/2);
-    double viewport_height = 2 * h * focal_length;
-	double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
+double theta = degrees_to_radians(c.vfov);
+double h = tan(theta/2);
+double viewport_height = 2 * h * focal_length;
+double viewport_width = viewport_height * ((double)c.image_width/c.image_height);
 ```
 
 Testing now with 2 touching spheres, using a 90° field of view:
@@ -667,16 +667,16 @@ We can rotate the camera around its normal axis. We need a way to specify the up
 The tutorial uses the common convention of naming this the “view up” (vup) vector.
 We will make the viewport height dependent from the vertical field of view and the aspect ratio. 
 ```c
-	cam.vfov = 90;
-	cam.lookfrom = point3(-2,2,1);   // Point camera is looking from
-    cam.lookat   = point3(0,0,-1);  // Point camera is looking at
-    cam.vup      = vec3(0,1,0);     // Camera-relative "up" direction
+cam.vfov = 90;
+cam.lookfrom = point3(-2,2,1);   // Point camera is looking from
+cam.lookat   = point3(0,0,-1);  // Point camera is looking at
+cam.vup      = vec3(0,1,0);     // Camera-relative "up" direction
 
-	double theta = degrees_to_radians(cam.vfov);
-    double h = tan(theta/2);
-    double viewport_height = 2 * h * focal_length;
-	double viewport_width = viewport_height * ((double)cam.image_width/cam.image_height);
-	...
+double theta = degrees_to_radians(cam.vfov);
+double h = tan(theta/2);
+double viewport_height = 2 * h * focal_length;
+double viewport_width = viewport_height * ((double)cam.image_width/cam.image_height);
+...
 ```
 
 With a fof of 90 and of 20:
@@ -687,8 +687,23 @@ With a fof of 90 and of 20:
 </div>
 
 ## Defocus Blur
+Also known as depth of field, this is the effect of having objects at different distances from the camera appear out of focus. 
 
+We call the distance between the camera center and the plane where everything is in perfect focus the focus distance. Be aware that the focus distance is not usually the same as the focal length — the focal length is the distance between the camera center and the image plane.
 
+The viewport lies on the focus plane, centered on the camera view direction vector.
+
+Without defocus blur, all scene rays originate from the camera center (or lookfrom). In order to accomplish defocus blur, we construct a disk centered at the camera center.
+
+Since we'll be choosing random points from the defocus disk, we'll need a function to do that: random_in_unit_disk(). This function works using the same kind of method we use in random_in_unit_sphere(), just for two dimensions.
+
+Now the viewport is dependent of the focus distance.
+```c
+// double focal_length = length(vec3substr(c.lookfrom, c.lookat));
+
+double theta = degrees_to_radians(c.vfov);
+double h = tan(theta/2);
+double viewport_height = 2 * h * c.focus_dist;
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  

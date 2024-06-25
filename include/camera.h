@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 16:37:03 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 07:52:49 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 08:25:16 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct	t_camera
 	t_point3 	lookfrom;   		// Point camera is looking from
     t_point3 	lookat;  			// Point camera is looking at
     t_vec3   	vup;     			// Camera-relative "up" direction
+	double 		defocus_angle;  // Variation angle of rays through each pixel
+    double 		focus_dist;    // Distance from camera lookfrom point to plane of perfect focus
 	
 	// considered private
 	int    		image_height;   // Rendered image height
@@ -39,6 +41,8 @@ typedef struct	t_camera
     t_vec3		pixel_delta_v;  // Offset to pixel below
 	double		pixel_samples_scale;
 	t_vec3   	u, v, w;              // Camera frame basis vectors
+	t_vec3  	defocus_disk_u;       // Defocus disk horizontal radius
+    t_vec3  	defocus_disk_v;       // Defocus disk vertical radius
 } 				t_camera;
 
 t_camera	camera();

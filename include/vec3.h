@@ -121,5 +121,17 @@ inline double reflectance(double cosine, double refraction_index) {
 	return r0 + (1-r0)*pow((1 - cosine),5);
 }
 
+/*
+ * Random vector in unit disk
+ */
+inline t_vec3 random_in_unit_disk() 
+{
+    while (1) 
+	{
+        t_vec3 p = vec3(random_double(-1,1), random_double(-1,1), 0);
+        if (length_squared(p) < 1)
+            return p;
+    }
+}
 
 #endif
