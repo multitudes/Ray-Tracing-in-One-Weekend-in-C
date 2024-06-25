@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 07:59:11 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 08:09:31 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_camera camera()
     c.samples_per_pixel = 100;
 	c.pixel_samples_scale = 1.0 / c.samples_per_pixel;
 
-	c.vfov = 90;
+	c.vfov = 20;
 	
     c.lookfrom = point3(-2,2,1);   // Point camera is looking from
     c.lookat   = point3(0,0,-1);  // Point camera is looking at

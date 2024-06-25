@@ -676,10 +676,14 @@ We will make the viewport height dependent from the vertical field of view and t
     double h = tan(theta/2);
     double viewport_height = 2 * h * focal_length;
 	double viewport_width = viewport_height * ((double)cam.image_width/cam.image_height);
+	...
 ```
 
+With a fof of 90 and of 20:
+
 <div style="text-align: center;">
-<img src="assets/faraway.png" alt="Camera" style="width: 70%;display: inline-block;" />
+<img src="assets/faraway.png" alt="Camera" style="width: 45%;display: inline-block;" />
+<img src="assets/close.png" alt="Camera" style="width: 45%;display: inline-block;" />
 </div>
 
 ## Defocus Blur
