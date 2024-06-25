@@ -55,9 +55,6 @@ libft:
 $(NAME): $(OBJS) $(HDRS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCLUDE) -o $(NAME)
 
-# %.o: %.c
-# 	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) && printf "Compiling: $(notdir $<)"
-
 clean:
 	rm -f $(OBJECTS) *~
 	$(MAKE) -C $(LIBFTDIR) clean
