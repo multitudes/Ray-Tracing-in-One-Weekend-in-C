@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:45:44 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 12:55:22 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 17:07:39 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,10 @@ int main(int argc, char **argv)
 
 	// to avoid mallocs on the stack which is slower also and can lead to difficulties in 
 	// freeing the memory, we use a list of pointers to hittables
-	t_lambertian sphere_materials_lambertian[22*22];
-	t_metal sphere_materials_metal[22*22];
-	t_dielectric sphere_materials_dielectric[22*22];
-	t_sphere spheres[22*22];
+	t_lambertian sphere_materials_lambertian[22*22 + 4];
+	t_metal sphere_materials_metal[22*22 + 4];
+	t_dielectric sphere_materials_dielectric[22*22 + 4];
+	t_sphere spheres[22*22 + 4];
 
 
 	for (int a = -11; a < 11; a++) 

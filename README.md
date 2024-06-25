@@ -808,10 +808,10 @@ There is aLso another problem. The memory allocation makes my program suuuper sl
 I will revert to use the stack for spheres and materials. It is a waste of space but it is fine for this implementation:
 
 ```c
-	t_lambertian sphere_materials_lambertian[22*22];
-	t_metal sphere_materials_metal[22*22];
-	t_dielectric sphere_materials_dielectric[22*22];
-	t_sphere spheres[22*22];
+	t_lambertian sphere_materials_lambertian[22*22 + 4];
+	t_metal sphere_materials_metal[22*22 + 4];
+	t_dielectric sphere_materials_dielectric[22*22 + 4];
+	t_sphere spheres[22 * 22 + 4];
 
 	...
 	// in the loop
@@ -820,7 +820,7 @@ I will revert to use the stack for spheres and materials. It is a waste of space
 		// diffuse
 		t_color albedo = vec3cross(color_random(), color_random());
 		lambertian_init(&sphere_materials_lambertian[i], albedo);
-		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_lambertian[i]);
+		spheres[i] = sphere(center, 0.2, (t_material*)&sphere_materials_lambertian[i]);
 		list[i] = (t_hittable*)&spheres[i];
 	} 
 	else if (choose_mat < 0.95) 
@@ -829,14 +829,14 @@ I will revert to use the stack for spheres and materials. It is a waste of space
 		t_color albedo = color_random_min_max(0.5,1);
 		double fuzz = random_double(0, 0.5);
 		metal_init(&sphere_materials_metal[i], albedo, fuzz);
-		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_metal[i]);
+		spheres[i] = sphere(center, 0.2, (t_material*)&sphere_materials_metal[i]);
 		list[i] = (t_hittable*)&spheres[i];
 	} 
 	else 
 	{
 		// glass
 		dielectric_init(&sphere_materials_dielectric[i], 1.5);
-		spheres[i] = sphere(point3(center.x, center.y, center.z), 0.2, (t_material*)&sphere_materials_dielectric[i]);
+		spheres[i] = sphere(point3(center, 0.2, (t_material*)&sphere_materials_dielectric[i]);
 		list[i] = (t_hittable*)&spheres[i];
 	}
 ```
