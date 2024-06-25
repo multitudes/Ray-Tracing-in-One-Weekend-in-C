@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 09:14:26 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/25 10:34:41 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ t_camera camera()
 	
 	// public members
 	c.aspect_ratio = (double)16.0 / 9.0; 	// Ratio of image width over height
-	c.image_width = 400; 					// Rendered image width in pixel count
-    c.samples_per_pixel = 100;				// Count of random samples for each pixel
+	c.image_width = 1200; 					// Rendered image width in pixel count
+    c.samples_per_pixel = 500;				// Count of random samples for each pixel
 	c.max_depth = 50;						// Maximum number of ray bounces into scene
 	
 	c.vfov = 20; 							// Vertical view angle (field of view)
-    c.lookfrom = point3(-2,2,1);			// Point camera is looking from
-    c.lookat = point3(0,0,-1);				// Point camera is looking at
+    c.lookfrom = point3(13,2,3);			// Point camera is looking from
+    c.lookat = point3(0,0,0);				// Point camera is looking at
     c.vup = vec3(0,1,0);					// Camera-relative "up" direction
 	
-    c.defocus_angle = 10; 					// Variation angle of rays through each pixel
-    c.focus_dist = 3.4;						// Distance from camera lookfrom point to plane of perfect focus
+    c.defocus_angle = 0.6; 					// Variation angle of rays through each pixel
+    c.focus_dist = 10;						// Distance from camera lookfrom point to plane of perfect focus
 
 	// initialize the camera from public members
 	c.image_height = (double)c.image_width / c.aspect_ratio;

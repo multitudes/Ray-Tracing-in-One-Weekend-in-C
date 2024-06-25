@@ -707,11 +707,52 @@ double viewport_height = 2 * h * c.focus_dist;
 ..
 ```
 
-We get the following result:
+We get the following result (one glass sphere with an air bubble inside, a matter and one metal sphere):
 <div style="text-align: center;">
 <img src="assets/depth.png" alt="defocus" style="width: 70%;display: inline-block;" />
 </div>
 
+## The end of the first book.
+The book ends with a new main to create the final image used for the cover. lets do that!
+
+The first pass with the background and the three big spheres. My c code will look like this:
+```c
+t_lambertian ground;
+lambertian_init(&ground, color(0.5, 0.5, 0.5));
+t_sphere s1 = sphere(point3(0.0, -1000, 0), 1000.0, (t_material*)&ground);
+
+t_dielectric material1;
+dielectric_init(&material1, 1.50);
+
+t_lambertian material2;
+lambertian_init(&material2, color(0.4, 0.2, 0.1));
+
+t_metal material3;
+metal_init(&material3, color(0.7, 0.6, 0.5), 0.0);
+
+t_sphere s2 = sphere(point3(0, 1, 0), 1.0, (t_material*)&material1);
+t_sphere s3 = sphere(point3(-4, 1, 0), 1.0, (t_material*)&material2);
+t_sphere s4 = sphere(point3(4, 1, 0), 1.0, (t_material*)&material3);
+
+t_hittable *list[4];
+
+list[0] = (t_hittable*)(&s1);
+list[1] = (t_hittable*)(&s2);
+list[2] = (t_hittable*)(&s3);
+list[3] = (t_hittable*)(&s4);
+
+const t_hittablelist world = hittablelist(list, 4);
+
+// init camera
+t_camera c = camera();
+
+// render
+render(c, world);
+```
+And the result is:
+<div style="text-align: center;">
+<img src="assets/final.png" alt="final" style="width: 70%;display: inline-block;" />
+</div>
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
