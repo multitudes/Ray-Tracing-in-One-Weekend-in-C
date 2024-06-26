@@ -860,6 +860,10 @@ This is the last image at full resolution.
 <img src="assets/final2.png" alt="final" style="width: 70%;display: inline-block;" />
 </div>
 
+The series continues here:  
+[Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  
+with a new repo:  
+https://github.com/multitudes/Ray-Tracing-The-Next-Week-in-C
 
 ## links
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
