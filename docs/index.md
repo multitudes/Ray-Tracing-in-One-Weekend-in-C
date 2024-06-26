@@ -2,20 +2,22 @@ I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracin
 
 These are my notes from the book and what I learned in the process.
 
+# Raytracing
+At its core, a ray tracer sends rays through pixels and computes the color seen in the direction of those rays. 
 
-## Raytracing
-At its core, a ray tracer sends rays through pixels and computes the color seen in the direction of those rays. The involved steps are
+The involved steps are:
 
 - Calculate the ray from the “eye” through the pixel,
 - Determine which objects the ray intersects, and
 - Compute a color for the closest intersection point.
 
-## aspect ratio
+## The aspect ratio
 A 16∶9 aspect ratio means that the ratio of image width to image height is 16∶9.  
 For a practical example, an image 800 pixels wide by 400 pixels high has a 2∶1 aspect ratio. 
 
-## the output image
-The book writes the image to a file in the PPM format. The PPM format is a text-based format that starts with a header that describes the image size and color depth. The header is followed by the pixel data, which is written as a series of RGB triplets. 
+## The output image
+What I really like about this book is that it doesnt use any libraries and the output is a simple image file in the PPM format which is text based and very simple to understand.  
+The PPM format is a text-based format that starts with a header that describes the image size and color depth. The header is followed by the pixel data, which is written as a series of RGB triplets. 
 ex:
 ```
 P3
@@ -28,14 +30,23 @@ P3
 In the above example P3 is just a magic number and has no connection with the display color depth. The next line is the image size, 800 pixels wide by 450 pixels high. The last line is the color depth, 8 bits in this case but can be seen as the is the maximum value for each color. Everything after that is the image data: RGB triplets.  
 https://en.wikipedia.org/wiki/Netpbm 
 
+Once understood the basics we can use the library of out choice to output the image to the screen.
 
 ## The Viewport
-The viewport is a virtual rectangle in the 3D world that contains the grid of image pixel locations. If pixels are spaced the same distance horizontally as they are vertically, the viewport that bounds them will have the same aspect ratio as the rendered image. The distance between two adjacent pixels is called the pixel spacing, and square pixels is the standard. 
+The viewport is a virtual rectangle in the 3D world that contains the grid of image pixel locations. If pixels are spaced the same distance horizontally as they are vertically, the viewport that bounds them will have the same aspect ratio as the rendered image. The distance between two adjacent pixels is called the pixel spacing, and square pixels is the standard.  
 We'll initially set the distance between the viewport and the camera center point to be one unit. This distance is often referred to as the focal length.  
-While our 3D space has the conventions above, this conflicts with our image coordinates, where we want to have the zeroth pixel in the top-left and work our way down to the last pixel at the bottom right. This means that our image coordinate Y-axis is inverted: Y increases going down the image. 
- We'll also have the y-axis go up, the x-axis to the right, and the negative z-axis pointing in the viewing direction. (This is commonly referred to as right-handed coordinates.)
+
+We create our three D space with the following conventions:
+- The x-axis points to the right.
+- The y-axis points up.
+- The z-axis points out of the screen, toward the viewer.
+
+Therefore using what is commonly defined as right hand coordinates, the negative z-axis points in the scene through the viewport. 
+
+While our 3D space has the conventions above, this conflicts with our image coordinates which are the ones used in the rendering to a file or to a screen, where we want to have the zeroth pixel in the top-left and work our way down to the last pixel at the bottom right. This means that our image coordinate Y-axis is inverted: Y increases going down the image. 
 
 ## Ray-Sphere Intersection
+(If you see this on the github pages unfortunately Jekill doesnt render the math equations so I will have to debug them out later)
 
 The equation for a sphere of radius r that is centered at the origin is an important mathematical equation: 
 
@@ -210,6 +221,7 @@ compiledb -n < build.log
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  
 - [Raytracing the rest of your life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html)  
+- https://www.desmos.com/3d
 
 - [MLX42](https://github.com/codam-coding-college/MLX42)  
 - stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.

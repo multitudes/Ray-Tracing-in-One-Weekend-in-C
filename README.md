@@ -46,7 +46,7 @@ Therefore using what is commonly defined as right hand coordinates, the negative
 While our 3D space has the conventions above, this conflicts with our image coordinates which are the ones used in the rendering to a file or to a screen, where we want to have the zeroth pixel in the top-left and work our way down to the last pixel at the bottom right. This means that our image coordinate Y-axis is inverted: Y increases going down the image. 
 
 ## Ray-Sphere Intersection
-(unfortunately Jekill doesnt render the math equations so will have to write them out later)
+(If you see this on the github pages unfortunately Jekill doesnt render the math equations so I will have to debug them out later)
 The equation for a sphere of radius r that is centered at the origin is an important mathematical equation: 
 
 $$
@@ -865,6 +865,7 @@ This is the last image at full resolution.
 - [Raytracing in one weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)  
 - [Raytracing the next week](https://raytracing.github.io/books/RayTracingTheNextWeek.html)  
 - [Raytracing the rest of your life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html)  
+- https://www.desmos.com/3d
 - stb_image.h, a header-only image library available on GitHub at https://github.com/nothings/stb.
 - [https://gabrielgambetta.com/computer-graphics-from-scratch/](https://gabrielgambetta.com/computer-graphics-from-scratch/)  
 - A raytracer on the back of a business card. [https://fabiensanglard.net/rayTracing_back_of_business_card/](https://fabiensanglard.net/rayTracing_back_of_business_card/)
