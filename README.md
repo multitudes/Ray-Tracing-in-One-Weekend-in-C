@@ -876,3 +876,8 @@ This is the last image at full resolution.
 - An Introduction to Ray Tracing : An old book but a Classic.  
 - Physically Based Rendering : Heavy on maths but really good and well explained.  
 
+References:
+https://graphicscodex.com/app/app.html
+
+About coding in C++:  
+https://graphicscodex.com/app/app.html?page=_rn_CPP
