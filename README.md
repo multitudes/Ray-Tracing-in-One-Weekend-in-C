@@ -33,23 +33,22 @@ https://en.wikipedia.org/wiki/Netpbm
 Once understood the basics we can use the library of out choice to output the image to the screen.
 
 ## The Vec3, Color and Point classes
-For simplicity we will use the same struct (in C) for all three. The Vec3 struct will be used for vectors, colors, and points using a typedef and a union because when using a color having access to r g b is more intuitive than x y z.  
+For simplicity we will use the same struct (in C) for all three. The Vec3 struct will be used for vectors, colors, and points using a typedef and a union because when using a color having access to r g b is more intuitive than x y z. 
+ 
+## Using unions in C
+A union is a special data type available in C that allows to store different data types in the same memory location. You can define a union with many members, but only one member can contain a value at any given time. Unions provide an efficient way of using the same memory location for multiple-purpose.
+In my case I have a vector in 3d with x y and z components. Also I have a color type with 3 components too. I can use alias to use the same struct for both. Also I discovered that I can use a union to have access to rgb and xyz at the same time.  In C++ I would use encapsulation and private/public members with getters and setters but in C I dont have this level of abstraction.
 ```c
-typedef struct 	s_vec3
-{
-	union {
+typedef struct s_vec3 {
+    union {
         struct {
-            double x;
-            double y;
-            double z;
+            double x, y, z;
         };
         struct {
-            double r;
-            double g;
-            double b;
+            double r, g, b;
         };
-	};
-}				t_vec3, t_color, t_point3;
+    };
+} t_vec3, t_color, t_point3;
 ```
 
 ## The Ray
@@ -159,14 +158,22 @@ bool hit_sphere(const t_sphere *s, const t_ray *r)
 }
 ```
 
-## The Normal Vector
-This is a vector that is perpendicular to the surface at the point of intersection. 
+# The Normal Vector and shading
+This is a vector that is perpendicular to the surface at the point of intersection.  
+Normalizing It is an expensive operation involving taking the square root of the sum of the squares of the components of the vector. Still it needs to be done so all normal vectors will be of unit length.  
 
-Ex For a sphere, the outward normal is in the direction of the hit point minus the center: 
+Ex For a sphere, the outward normal is in the direction of the hit point minus the center:  
+A common trick used for visualizing normals (because it’s easy and somewhat intuitive to assume n is a unit length vector — so each component is between −1 and 1) is to map each component to the interval from 0 to 1, and then map (x,y,z) to (red,green,blue). 
+
+<div style="text-align: center;">
+<img src="assets/after.png" alt="shading" style="width: 45%;display: inline-block;" />
+</div>
 
 ## Which side of the sphere are we on?
-We need to choose to determine the side of the surface at the time of geometry intersection or at the time of coloring.
-This is a boolean determined with the dot product
+We need to choose to determine the side of the surface at the time of geometry intersection or at the time of coloring.  
+For objects that have an inside and an outside, like glass balls, we need to know if the ray is inside or outside the sphere.  
+It can be determined doing the dot product of the ray direction and the outward normal. If the dot product is positive, the ray is inside the sphere. If it is negative, the ray is outside the sphere.   
+
 ```c
 bool front_face;
 if (dot(ray_direction, outward_normal) > 0.0) {
@@ -180,7 +187,11 @@ if (dot(ray_direction, outward_normal) > 0.0) {
 }
 ```
 
-## An array of shapes in C? How!?
+## The hittable property
+
+The book makes an “abstract class” for anything a ray might hit, and make both a sphere and a list of spheres just something that can be hit. How to do this in C?
+
+##  An array of shapes in C? How!?
 Thanks to this course I discovered that you can have polymorphic behavior in C. 
 It is a bit weird at first but totally doable.  
 
@@ -329,7 +340,6 @@ typedef struct {
 } t_interval;
 ```
 
-
 ## The Camera
 In C we do not have classes of course but we will still refactor the code in its own file with its struct and functions.
 The camera is responsible for two important jobs:
@@ -386,21 +396,6 @@ t_vec3 d = add(add(a, b), add(a, b));
 ```
 It is much nicer.
 
-## Using unions in C
-A union is a special data type available in C that allows to store different data types in the same memory location. You can define a union with many members, but only one member can contain a value at any given time. Unions provide an efficient way of using the same memory location for multiple-purpose.
-In my case I have a vector in 3d with x y and z components. Also I have a color type with 3 components too. I can use alias to use the same struct for both. Also I discovered that I can use a union to have access to rgb and xyz at the same time.  In C++ I would use encapsulation and private/public members with getters and setters but in C I dont have this level of abstraction.
-```c
-typedef struct s_vec3 {
-    union {
-        struct {
-            double x, y, z;
-        };
-        struct {
-            double r, g, b;
-        };
-    };
-} t_vec3, t_color, t_point3;
-```
 
 ## Antialiasing
 If we look at our zoomed image created until now we see that the edges are jagged like pixels on a staircase. To fix this we will take multiple samples per pixel and average the color. This is called antialiasing. In the book also there is an interesting note about the human eye and how it perceives color.
