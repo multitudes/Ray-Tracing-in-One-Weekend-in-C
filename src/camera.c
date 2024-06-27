@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 10:28:07 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/06/25 12:52:19 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/06/27 07:43:46 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,6 @@ t_color	ray_color(t_ray *r, const int depth, const t_hittablelist *world)
 		t_color attenuation;
 		if (rec.mat->scatter(rec.mat, r, &rec, &attenuation, &scattered))
 			return vec3mult(attenuation, ray_color(&scattered, depth - 1, world));
-		// t_vec3 direction = vec3add(rec.normal, random_unit_vector());
-		// t_ray scattered = ray(rec.p, direction);
-		// return vec3multscalar(ray_color(&scattered, depth - 1, world), 0.5);
 		return color(0,0,0);
 	}
 	t_vec3 unit_direction = unit_vector(r->dir);

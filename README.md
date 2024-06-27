@@ -32,6 +32,58 @@ https://en.wikipedia.org/wiki/Netpbm
 
 Once understood the basics we can use the library of out choice to output the image to the screen.
 
+## The Vec3, Color and Point classes
+For simplicity we will use the same struct (in C) for all three. The Vec3 struct will be used for vectors, colors, and points using a typedef and a union because when using a color having access to r g b is more intuitive than x y z.  
+```c
+typedef struct 	s_vec3
+{
+	union {
+        struct {
+            double x;
+            double y;
+            double z;
+        };
+        struct {
+            double r;
+            double g;
+            double b;
+        };
+	};
+}				t_vec3, t_color, t_point3;
+```
+
+## The Ray
+The ray is essentially a function that takes a param a point in 3D space, and moves this point along the direction vector of the ray. The amount of movement is determined by the time parameter t. Therefore we have a function P(t) = A + tb where A is the origin of the ray and b is the direction of the ray.
+This function gives us a point in 3D space for each value of t.
+
+```c
+t_point3	point_at(const t_ray *ray, double t)
+{
+	t_point3	result;
+	t_vec3 		scaled_dir;
+
+	scaled_dir = vec3multscalar(ray->dir, t);
+	result = vec3add(ray->orig, scaled_dir);
+
+	return (result);
+}
+```
+
+As part of the camera we have function ray_color that uses a lerp function to blend the colors of the sky and the ground effectively creating a soft gradient.  A lerp is 
+$$
+blendedValue=(1−a)⋅startValue+a⋅endValue,
+$$
+with `a` going from zero to one. When we normalize the vector we get a value between -1 and 1. We can then scale it to 0 and 1. 
+```c
+t_color ray_color(const t_ray *r)
+	...
+	t_vec3 unit_direction = unit_vector(r->dir);
+	double a = 0.5 * (unit_direction.y + 1.0);
+	t_color start = vec3multscalar(color(1.0, 1.0, 1.0), 1.0 - a);
+	t_color end = vec3multscalar(color(0.5, 0.7, 1.0), a);
+	return vec3add(start, end);
+```
+
 ## The Viewport
 The viewport is a virtual rectangle in the 3D world that contains the grid of image pixel locations. If pixels are spaced the same distance horizontally as they are vertically, the viewport that bounds them will have the same aspect ratio as the rendered image. The distance between two adjacent pixels is called the pixel spacing, and square pixels is the standard.  
 We'll initially set the distance between the viewport and the camera center point to be one unit. This distance is often referred to as the focal length.  
