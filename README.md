@@ -239,18 +239,6 @@ The functions all take a `const void* self` parameter, which is a pointer to the
 
 When you create a new shape, you set the `hit` function pointer in the `hittable` struct to the appropriate function:
 
-```c
-t_sphere* new_sphere(t_point3 center, double radius) {
-    sphere* s = malloc(sizeof(sphere));
-    s->base.hit = hit_sphere;
-    s->center = center;
-    s->radius = radius;
-    return s;
-}
-```
-Or actually without malloc is also possible since I have small structs I can return them by value.  
-I did not do the necessary tests but I imagine Using malloc to allocate memory would take use some 
-extra time. Stack is faster than heap, but then I copy the struct when returning it. I do not yet know which is faster.  
 
 ```c
 t_sphere new_sphere(t_point3 center, double radius) {
