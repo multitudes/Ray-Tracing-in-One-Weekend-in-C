@@ -69,10 +69,12 @@ t_point3	point_at(const t_ray *ray, double t)
 }
 ```
 
-As part of the camera we have function ray_color that uses a lerp function to blend the colors of the sky and the ground effectively creating a soft gradient.  A lerp is 
+As part of the camera we have function ray_color that uses a lerp function to blend the colors of the sky and the ground effectively creating a soft gradient.  A lerp is  
+
+$$  
+blendedValue = (1 - a) \cdot startValue + a \cdot endValue
 $$
-blendedValue=(1−a)⋅startValue+a⋅endValue,
-$$
+
 with `a` going from zero to one. When we normalize the vector we get a value between -1 and 1. We can then scale it to 0 and 1. 
 ```c
 t_color ray_color(const t_ray *r)
