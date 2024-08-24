@@ -110,6 +110,7 @@ $$
 If a given point (x,y,z) is inside the sphere, then $x^2 + y^2 + z^2 < r^2$ , and if a given point (x,y,z) is outside the sphere, then $x^2 + y^2 + z^2 > r^2$.
 
 If we want to allow the sphere center to be at an arbitrary point (Cx,Cy,Cz) in 3D, then the equation becomes:  
+
 $$
 (Cx−x)^2 + (Cy−y)^2 + (Cz−z)^2 = r^2
 $$
@@ -134,6 +135,7 @@ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
 $$
 
 So solving for t in the ray-sphere intersection equation gives us these values for a, b, and c:
+
 $$
 a=d⋅d
 b=−2d⋅(C−Q)
@@ -264,7 +266,6 @@ const t_hittablelist world = hittablelist(list, 2);
 ```
 
 This already works and I get the second sphere creating a nice background.
-![sphere](assets/test2.ppm)
 
 To check if a ray hits any of the shapes, you can loop over the array and call the `hit` function through the function pointer:
 
