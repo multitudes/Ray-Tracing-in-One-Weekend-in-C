@@ -1,4 +1,5 @@
-I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) but writing the code in C for good practice.  
+I am following the tutorials in [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) but writing the code in C for good practice.   
+Also available are [Ray Tracing The Next Week in C](https://github.com/multitudes/Ray-Tracing-The-Next-Week-in-C/tree/main), and [Ray Tracing the rest of your life in C](https://github.com/multitudes/Ray-Tracing-the-rest-of-your-life--in-C)
 
 These are my notes from the book and what I learned in the process.
 
